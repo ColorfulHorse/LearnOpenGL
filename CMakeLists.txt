@@ -1,9 +1,9 @@
 ﻿# CMakeList.txt : CMake project for LearnOpenGL, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required(VERSION 3.8)
 
-project ("LearnOpenGL")
+project("LearnOpenGL")
 set(CXX_STANDARD 11)
 
 file(GLOB SRC_LIST "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c")
@@ -19,17 +19,16 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/libs)
 
 # Add source to this project's executable.
-add_executable (LearnOpenGL ${SRC_LIST})
+add_executable(LearnOpenGL ${SRC_LIST})
 
-# 拷贝文件到输出目录
 file(GLOB SHADER_LIST "${PROJECT_SOURCE_DIR}/shaders/*.fs" "${PROJECT_SOURCE_DIR}/shaders/*.vs")
 file(GLOB ASSET_LIST "${PROJECT_SOURCE_DIR}/assets/*.*")
-file(COPY ${SHADER_LIST} ${ASSET_LIST} DESTINATION ${CMAKE_BINARY_DIR})
 
-execute_process(COMMAND ${LearnOpenGL} -E
-copy ${SHADER_LIST}  ${output_required_files},
-copy ${ASSET_LIST}  ${COPY_TARGET_DIR}
-)
+# 编译前拷贝资源文件
+add_custom_command(TARGET LearnOpenGL PRE_BUILD
+	COMMENT "copy"
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+	${SHADER_LIST} ${ASSET_LIST} ${CMAKE_BINARY_DIR})
 
 target_link_libraries(
 	LearnOpenGL

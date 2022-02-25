@@ -29,7 +29,7 @@ void HelloTexture::initTexture() {
 	stbi_image_free(data);
 
 	float vertices[] = {
-		// 位置*3 颜色*3 纹理*3
+		// 位置*3 颜色*3 纹理*2
 		0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,	  // 右上
 		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // 右下
 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
@@ -70,7 +70,7 @@ void HelloTexture::onRender() {
 	glUseProgram(shaderProgram);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 8, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void HelloTexture::onDestroy() {
