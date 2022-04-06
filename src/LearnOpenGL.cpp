@@ -2,12 +2,13 @@
 //
 
 #include "LearnOpenGL.h"
-#include "helloTriangle.h"
-#include "helloShader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "helloTriangle.h"
+#include "helloShader.h"
 #include "helloTexture.h"
+#include "helloTransform.h"
 
 using namespace std;
 
@@ -24,7 +25,8 @@ void processInput(GLFWwindow *window) {
 int main() {
 	// unique_ptr<Renderable> renderObj(new HelloTriangle());
 	// unique_ptr<Renderable> renderObj(new HelloShader());
-	unique_ptr<Renderable> renderObj(new HelloTexture());
+	// unique_ptr<Renderable> renderObj(new HelloTexture());
+	unique_ptr<Renderable> renderObj(new HelloTransform());
 	glfwInit();
 	// 主次版本
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

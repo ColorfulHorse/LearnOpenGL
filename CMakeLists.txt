@@ -21,8 +21,8 @@ link_directories(${PROJECT_SOURCE_DIR}/libs)
 # Add source to this project's executable.
 add_executable(LearnOpenGL ${SRC_LIST})
 
-file(GLOB SHADER_LIST "${PROJECT_SOURCE_DIR}/shaders/*.fs" "${PROJECT_SOURCE_DIR}/shaders/*.vs")
-file(GLOB ASSET_LIST "${PROJECT_SOURCE_DIR}/assets/*.*")
+file(GLOB SHADER_LIST "${PROJECT_SOURCE_DIR}/shaders/*")
+file(GLOB ASSET_LIST "${PROJECT_SOURCE_DIR}/assets/*")
 
 # 编译前拷贝资源文件
 add_custom_command(TARGET LearnOpenGL PRE_BUILD

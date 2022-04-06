@@ -9,5 +9,5 @@ out vec2 textCoord;
 void main() {
 	gl_Position = vec4(aPos, 1.0);
 	finalColor = aColor;
-	textCoord = aTexCoord;
+	textCoord = vec2(aTexCoord.x, aTexCoord.y);
 }

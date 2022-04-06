@@ -155,7 +155,6 @@ void HelloTriangle::initMulti() {
 	}
 
 	// 着色器程序，用于链接多个着色器
-	shaderProgram;
 	shaderProgram = glCreateProgram();
 	// 链接
 	glAttachShader(shaderProgram, vertexShader);
@@ -173,28 +172,22 @@ void HelloTriangle::initMulti() {
 	glDeleteShader(fragmentShader);
 
 	float vertices[] = {
-		-1.0f,
-		0.0f,
-		0.0f,
-		-0.5f,
-		0.5f,
-		0.0f,
+		-0.5f, -0.5f, 0.0f, // 左下角
+		-0.5f, 0.5f, 0.0f, // 左上角
 
-		0.0f,
-		0.0f,
-		0.0f,
-
-		1.0f,
-		0.0f,
-		0.0f,
-		0.5f,
-		0.5f,
-		0.0f,
+		0.5f, 0.5f, 0.0f, // 右上角
+		0.5f, -0.5f, 0.0f, // 右下角
 	};
+
+	/* float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f,
+	}; */
 	// 两组连接三个点构成两个三角形
 	uint32_t indices[] = {
-		0, 1, 2, 
-		2, 3, 4
+		0, 1, 3, 
+		1, 2, 3
 	};
 
 	// 创建顶点数组对象，VAO用于管理多个VBO
@@ -223,7 +216,6 @@ void HelloTriangle::initMulti() {
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 	glBindVertexArray(0);
 
 	// 线框模式
@@ -231,16 +223,16 @@ void HelloTriangle::initMulti() {
 }
 
 void HelloTriangle::onCreate() {
-	initTriangle();
+	initMulti();
 }
 
 void HelloTriangle::onRender() {
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	// glDrawArrays(GL_TRIANGLES, 0, 3);
 	// 参数3:索引数据类型
-	// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void HelloTriangle::onDestroy() {
