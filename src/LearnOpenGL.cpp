@@ -2,15 +2,19 @@
 //
 
 #include "LearnOpenGL.h"
+#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
 #include "helloTriangle.h"
 #include "helloShader.h"
 #include "helloTexture.h"
 #include "helloTransform.h"
+#include "helloCoordinate.h"
+#include "helloCamera.h"
 
 using namespace std;
+
+Renderable *renderObj = nullptr;
 
 /*
  * 接收键盘输入
@@ -20,13 +24,19 @@ void processInput(GLFWwindow *window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
+	if (renderObj) {
+		renderObj->onProcessInput(window);
+	}
 }
 
 int main() {
 	// unique_ptr<Renderable> renderObj(new HelloTriangle());
 	// unique_ptr<Renderable> renderObj(new HelloShader());
 	// unique_ptr<Renderable> renderObj(new HelloTexture());
-	unique_ptr<Renderable> renderObj(new HelloTransform());
+	// unique_ptr<Renderable> renderObj(new HelloTransform());
+	// unique_ptr<Renderable> renderObj(new HelloCoordinate(800, 600));
+	// renderObj = new HelloCoordinate(800, 600);
+	renderObj = new HelloCamera();
 	glfwInit();
 	// 主次版本
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -40,19 +50,19 @@ int main() {
 		cout << "Failed to initialize GLAD" << endl;
 		return -1;
 	}
+	renderObj->onCreate();
+
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, int width, int height) {
 		// viewprot 相当于opengl显示区域，当window大小被改变时它也应该被改变
 		glViewport(0, 0, width, height);
 	});
-
-	renderObj->onCreate();
 
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 		// 设置清屏颜色
 		glClearColor(0.2f, 0.3f, 0.2f, 1.0f);
 		// 清空缓冲颜色值
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		renderObj->onRender();
 		// 双缓冲，交换缓冲
@@ -62,6 +72,8 @@ int main() {
 		glfwPollEvents();
 	}
 	renderObj->onDestroy();
+	delete renderObj;
+	renderObj = nullptr;
 	glfwTerminate();
 	return 0;
 }

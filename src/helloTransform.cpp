@@ -102,6 +102,7 @@ void HelloTransform::onRender() {
 
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
+
 	glm::mat4 transform(1.0f);
 	// 代码中是先位移后旋转，实际上是先旋转后位移
 	// 应用变换应该 缩放->旋转->位移，表现在代码中则顺序相反
