@@ -11,6 +11,8 @@
 using namespace std;
 
 void HelloCamera::init() {
+	// 隐藏鼠标光标
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glEnable(GL_DEPTH_TEST);
 	float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -122,20 +124,60 @@ void HelloCamera::onCreate() {
 	init();
 }
 
-void HelloCamera::onProcessInput(GLFWwindow *window) {
+/* 
+ * 根据键盘输入平移视角
+ */
+void HelloCamera::onProcessInput() {
 	// W S A D 前后左右移动摄像机
 	float speed = deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {	
-		cameraPos += speed * cameraFront;
+		camera.processKeyboard(FORWARD, deltaTime);
 	}else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		cameraPos -= speed * cameraFront;
+		camera.processKeyboard(BACKWARD, deltaTime);
 	}else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		// 叉乘 +X * +Y = +Z  +Y * +X = -Z
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+		camera.processKeyboard(LEFT, deltaTime);
 	}else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+		camera.processKeyboard(RIGHT, deltaTime);
 	}
 	
+}
+/* 
+ * 根据鼠标移动旋转视角
+ */
+void HelloCamera::onMouseMoved(double xposIn, double yposIn) {
+	float xPos = static_cast<float>(xposIn);
+    float yPos = static_cast<float>(yposIn);
+	if (firstMove) {
+		lastX = xPos;
+		lastY = yPos;
+		firstMove = false;
+	}
+	
+	// 灵敏度
+	float sensitivity = 0.1f;
+	float offsetX = xPos - lastX;
+	float offsetY = lastY - yPos;
+	std::cout << "offset x: " << offsetX << "    offset y: " << offsetY << std::endl;
+	lastX = xPos;
+	lastY = yPos;
+	camera.processMouseMovement(offsetX, offsetY);
+	// yaw += offsetX * sensitivity;
+	// pitch += offsetY * sensitivity;
+	// // 限制俯仰角避免翻转现象
+	// if (pitch > 89.0f) {
+	// 	pitch = 89.0f;
+	// } else if (pitch < -89.0f) {
+	// 	pitch = -89.0f;
+	// }
+	
+	// // 根据向量的两次投影计算出摄像机朝向向量
+	// // 初始pitch yaw都为0时，x=1, y=0, z=0，摄像头实际上指向了x轴正半轴
+	// // 所以初始yaw需要是-90，x=0 y=0 z=-1， 指向z轴负半轴
+	// cameraFront.x = cos(glm::radians(pitch)) * cos(glm::radians((yaw)));
+	// cameraFront.y = sin(glm::radians(pitch));
+	// cameraFront.z = cos(glm::radians(pitch)) * sin(glm::radians((yaw)));
+	// cameraFront = glm::normalize(cameraFront);
 }
 
 void HelloCamera::onRender() {
@@ -150,7 +192,7 @@ void HelloCamera::onRender() {
 	shader.use();
 	glBindVertexArray(VAO);
 	// glm::mat4 model(1.0f);
-	glm::mat4 view(1.0f);
+	// glm::mat4 view(1.0f);
 	glm::mat4 projection(1.0f);
 	// 绕x轴旋转
 	// model = glm::rotate(model, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -160,11 +202,11 @@ void HelloCamera::onRender() {
 	// float cameraX = static_cast<float>((raduis * sin(glfwGetTime())));
 	// float cameraZ = static_cast<float>(raduis * cos(glfwGetTime()));
 	// view = glm::lookAt(glm::vec3(cameraX, 0.0f, cameraZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
+	// view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
 	// 透视角度
-	projection = glm::perspective(glm::radians(45.0f), 800 * 1.0f / 600, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);
 	// shader.setMat4("model", model);
-	shader.setMat4("view", view);
+	shader.setMat4("view", camera.getViewMat());
 	shader.setMat4("projection", projection);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	for (size_t i = 0; i < 10; i++) {

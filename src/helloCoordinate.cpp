@@ -140,7 +140,7 @@ void HelloCoordinate::onRender() {
 	glm::mat4 projection(1.0f);
 	// 向后移
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), screenWidth * 1.0f / screenHeight, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), 800 * 1.0f / 600, 0.1f, 100.0f);
 	uint32_t viewLoc = glGetUniformLocation(shaderProgram, "view");
 	uint32_t proLoc = glGetUniformLocation(shaderProgram, "projection");
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));

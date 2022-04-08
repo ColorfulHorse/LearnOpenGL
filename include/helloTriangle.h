@@ -4,6 +4,7 @@
 
 class HelloTriangle : public Renderable {
 public:
+	HelloTriangle(GLFWwindow *win): Renderable(win){}
 	void initTriangle();
 	void initMulti();
 	virtual void onCreate();

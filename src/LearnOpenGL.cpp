@@ -25,7 +25,13 @@ void processInput(GLFWwindow *window) {
 		glfwSetWindowShouldClose(window, true);
 	}
 	if (renderObj) {
-		renderObj->onProcessInput(window);
+		renderObj->onProcessInput();
+	}
+}
+
+void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
+	if (renderObj) {
+		renderObj->onMouseMoved(xPos, yPos);
 	}
 }
 
@@ -36,7 +42,6 @@ int main() {
 	// unique_ptr<Renderable> renderObj(new HelloTransform());
 	// unique_ptr<Renderable> renderObj(new HelloCoordinate(800, 600));
 	// renderObj = new HelloCoordinate(800, 600);
-	renderObj = new HelloCamera();
 	glfwInit();
 	// 主次版本
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -50,13 +55,15 @@ int main() {
 		cout << "Failed to initialize GLAD" << endl;
 		return -1;
 	}
-	renderObj->onCreate();
 
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, int width, int height) {
 		// viewprot 相当于opengl显示区域，当window大小被改变时它也应该被改变
 		glViewport(0, 0, width, height);
 	});
+	glfwSetCursorPosCallback(window, mouse_callback);
 
+	renderObj = new HelloCamera(window);
+	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 		// 设置清屏颜色

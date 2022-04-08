@@ -4,6 +4,7 @@
 
 class HelloShader : public Renderable {
 public:
+	HelloShader(GLFWwindow *win): Renderable(win){}
 	void dynamicColor();
 	void multiColor();
 	virtual void onCreate();

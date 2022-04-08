@@ -6,7 +6,6 @@
 class HelloCoordinate : public Renderable {
 public:
     uint32_t texture1 = 0, texture2 = 0;
-	uint32_t screenWidth, screenHeight;
 	glm::vec3 cubePositions[10] = {
 		glm::vec3(0.0f,  0.0f, 0.0f), 
 		glm::vec3(2.0f,  5.0f, -15.0f), 
@@ -19,12 +18,12 @@ public:
 		glm::vec3( 1.5f,  0.2f, -1.5f), 
 		glm::vec3(-1.3f,  1.0f, -1.5f)  
 	};
+	HelloCoordinate(GLFWwindow *win): Renderable(win){}
     void init();
 	void drawMulti();
 	virtual void onCreate();
 	virtual void onRender();
 	virtual void onDestroy();
-	HelloCoordinate(uint32_t w, uint32_t h):screenWidth(w), screenHeight(h) {}
 };
 
 #endif

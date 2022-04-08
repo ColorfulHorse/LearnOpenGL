@@ -6,6 +6,7 @@
 class HelloTransform : public Renderable {
 public:
     uint32_t texture1 = 0, texture2 = 0;
+	HelloTransform(GLFWwindow *win): Renderable(win){}
     void initTexture();
 	virtual void onCreate();
 	virtual void onRender();

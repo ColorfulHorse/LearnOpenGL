@@ -1,16 +1,14 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef HELLOCAMERA_H
+#define HELLOCAMERA_H
 #include "renderable.h"
 #include <cstdint>
 #include <glm/glm.hpp>
+#include "camera.h"
 
 class HelloCamera : public Renderable {
 public:
     uint32_t texture1 = 0, texture2 = 0;
-	glm::vec3 cameraPos = glm::vec3(0.0f, 1.0f, 3.0f);
-	// 相机朝向
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	glm::vec3 cubePositions[10] = {
 		glm::vec3(0.0f,  0.0f, 0.0f), 
 		glm::vec3(2.0f,  5.0f, -15.0f), 
@@ -25,12 +23,19 @@ public:
 	};
 	float deltaTime = 0.0f;
 	float lastTime = 0.0f;
+	// 鼠标默认点
+	float lastX = 400.0f, lastY = 300.0f;
+	bool firstMove = true;
+	// 俯仰角, 偏移角
+	float pitch = 0.0f, yaw = -90.0f;
+	float fov = 45.0f;
     void init();
 	virtual void onCreate();
 	virtual void onRender();
 	virtual void onDestroy();
-	virtual void onProcessInput(GLFWwindow *window);
-
+	virtual void onProcessInput();
+	virtual void onMouseMoved(double xPos, double yPos);
+	HelloCamera(GLFWwindow *win): Renderable(win){}
 };
 
 #endif
