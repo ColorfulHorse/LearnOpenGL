@@ -76,6 +76,11 @@ public:
     { 
         glUseProgram(id); 
     }
+
+    void release() 
+    { 
+        glDeleteProgram(id); 
+    }
     // utility uniform functions
     // ------------------------------------------------------------------------
     void setBool(const std::string &name, bool value) const
@@ -96,6 +101,15 @@ public:
     void setMat4(const std::string &name, const glm::mat4 &mat) const
     { 
         glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat)); 
+    }
+
+    void setVec3(const std::string &name, const glm::vec3 &value) const
+    { 
+        glUniform3fv(glGetUniformLocation(id, name.c_str()), 1, glm::value_ptr(value)); 
+    }
+    void setVec3(const std::string &name, float x, float y, float z) const
+    { 
+        glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z); 
     }
 
 private:

@@ -62,7 +62,7 @@ void HelloCoordinate::init() {
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-	shader = Shader("helloCoordinate.vs", "helloCoordinate.fs");
+	shader = Shader("shaders/helloCoordinate.vs", "shaders/helloCoordinate.fs");
 	shaderProgram = shader.id;
 
 	glGenVertexArrays(1, &VAO);
@@ -91,7 +91,7 @@ void HelloCoordinate::init() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	int32_t width, height, channels;
-	stbi_uc *data = stbi_load("container.jpg", &width, &height, &channels, 0);
+	stbi_uc *data = stbi_load("assets/container.jpg", &width, &height, &channels, 0);
 	if (data) {
 		// 根据图片创建纹理
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -109,7 +109,7 @@ void HelloCoordinate::init() {
 	// 放大缩小时平滑过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	data = stbi_load("awesomeface.png", &width, &height, &channels, 0);
+	data = stbi_load("assets/awesomeface.png", &width, &height, &channels, 0);
 	if (data) {
 		// 根据图片创建纹理
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);

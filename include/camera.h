@@ -25,7 +25,7 @@ class Camera {
 public:
 	float yaw;
 	float pitch;
-    float zoom;
+    float zoom = ZOOM;
 	// 相机朝向
 	glm::vec3 position;
 	glm::vec3 worldUp;
@@ -55,10 +55,10 @@ public:
 		pitch += yOffset * SENSITIVITY;
 
 		if (constrain) {
-			if (yaw > 89.0f) {
-				yaw = 89.0f;
-			} else if (yaw < -89.0f) {
-				yaw = -89.0f;
+			if (pitch > 89.0f) {
+				pitch = 89.0f;
+			} else if (pitch < -89.0f) {
+				pitch = -89.0f;
 			}
 		}
         updateCameraVector();

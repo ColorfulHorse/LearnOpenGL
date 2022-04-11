@@ -58,7 +58,7 @@ void HelloCamera::init() {
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-	shader = Shader("helloCamera.vs", "helloCamera.fs");
+	shader = Shader("shaders/helloCamera.vs", "shaders/helloCamera.fs");
 	shaderProgram = shader.id;
 
 	glGenVertexArrays(1, &VAO);
@@ -87,7 +87,7 @@ void HelloCamera::init() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	int32_t width, height, channels;
-	stbi_uc *data = stbi_load("container.jpg", &width, &height, &channels, 0);
+	stbi_uc *data = stbi_load("assets/container.jpg", &width, &height, &channels, 0);
 	if (data) {
 		// 根据图片创建纹理
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -105,7 +105,7 @@ void HelloCamera::init() {
 	// 放大缩小时平滑过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	data = stbi_load("awesomeface.png", &width, &height, &channels, 0);
+	data = stbi_load("assets/awesomeface.png", &width, &height, &channels, 0);
 	if (data) {
 		// 根据图片创建纹理
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -158,7 +158,6 @@ void HelloCamera::onMouseMoved(double xposIn, double yposIn) {
 	float sensitivity = 0.1f;
 	float offsetX = xPos - lastX;
 	float offsetY = lastY - yPos;
-	std::cout << "offset x: " << offsetX << "    offset y: " << offsetY << std::endl;
 	lastX = xPos;
 	lastY = yPos;
 	camera.processMouseMovement(offsetX, offsetY);
