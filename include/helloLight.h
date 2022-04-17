@@ -16,6 +16,7 @@ public:
 	bool firstMove = true;
 	Shader objectShader;
 	Shader lightShader;
+	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
     void init();
 	virtual void onCreate();
 	virtual void onRender();
