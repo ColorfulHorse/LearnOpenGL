@@ -12,6 +12,7 @@
 #include "helloCoordinate.h"
 #include "helloCamera.h"
 #include "helloLight.h"
+#include "helloMaterial.h"
 
 using namespace std;
 
@@ -64,7 +65,8 @@ int main() {
 	glfwSetCursorPosCallback(window, mouse_callback);
 
 	// renderObj = new HelloCamera(window);
-	renderObj = new HelloLight(window);
+	// renderObj = new HelloLight(window);
+	renderObj = new HelloMaterial(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);

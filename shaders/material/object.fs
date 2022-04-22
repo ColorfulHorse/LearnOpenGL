@@ -1,9 +1,22 @@
 #version 330 core
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
 
-uniform vec3 lightColor;
+struct Light {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    vec3 position;
+};
+
 uniform vec3 objectColor;
 // 光源位置
-uniform vec3 lightPos;
+uniform Light light;
+uniform Material material;
 
 // 片段的世界坐标
 in vec3 worldPos;
@@ -11,22 +24,22 @@ in vec3 worldPos;
 in vec3 viewPos;
 // 片段所在面法向量
 in vec3 normal;
+
 out vec4 FragColor;
+
 
 void main() {
     // 环境光照
-    float ambientStrength = 0.1f;
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 ambient = light.ambient * material.ambient;
 
     // 漫反射
     vec3 norm = normalize(normal);
     // 光源散射到顶点的方向
-    vec3 lightDirection = normalize(worldPos - lightPos);
+    vec3 lightDirection = normalize(worldPos - light.position);
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0f);
-    vec3 diffuse = diff * lightColor;
+    vec3 diffuse = light.diffuse * (diff * material.diffuse);
 
-    float specularStrength = 0.5f;
     // 视线向量
     vec3 viewDirection = normalize(worldPos - viewPos);
     // 光线基于法线的反射向量
@@ -34,7 +47,7 @@ void main() {
     // 镜面反射影响
     float spec = max(dot(reflectDirection, -viewDirection), 0.0f);
     // 反光度
-    spec = pow(spec, 32);
-    vec3 specular = spec * specularStrength * lightColor;
-    FragColor = vec4((ambient + diffuse + specular) * objectColor, 1.0f);
+    spec = pow(spec, material.shininess);
+    vec3 specular = light.specular * (spec * material.specular);
+    FragColor = vec4(ambient + diffuse + specular, 1.0f);
 }
