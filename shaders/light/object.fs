@@ -4,11 +4,11 @@ uniform vec3 lightColor;
 uniform vec3 objectColor;
 // 光源位置
 uniform vec3 lightPos;
+// 观察者坐标
+uniform vec3 viewPos;
 
 // 片段的世界坐标
 in vec3 worldPos;
-// 观察者坐标
-in vec3 viewPos;
 // 片段所在面法向量
 in vec3 normal;
 out vec4 FragColor;

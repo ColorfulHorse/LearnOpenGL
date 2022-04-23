@@ -13,15 +13,14 @@ struct Light {
     vec3 position;
 };
 
-uniform vec3 objectColor;
 // 光源位置
 uniform Light light;
 uniform Material material;
+uniform vec3 viewPos;
 
 // 片段的世界坐标
 in vec3 worldPos;
 // 观察者坐标
-in vec3 viewPos;
 // 片段所在面法向量
 in vec3 normal;
 
@@ -45,9 +44,10 @@ void main() {
     // 光线基于法线的反射向量
     vec3 reflectDirection = reflect(lightDirection, norm);
     // 镜面反射影响
-    float spec = max(dot(reflectDirection, -viewDirection), 0.0f);
+    float spec = max(dot(-viewDirection, reflectDirection), 0.0);
     // 反光度
     spec = pow(spec, material.shininess);
     vec3 specular = light.specular * (spec * material.specular);
-    FragColor = vec4(ambient + diffuse + specular, 1.0f);
+    vec3 res = ambient + diffuse + specular;
+    FragColor = vec4(res, 1.0);
 }
