@@ -39,12 +39,6 @@ void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
 }
 
 int main() {
-	// unique_ptr<Renderable> renderObj(new HelloTriangle());
-	// unique_ptr<Renderable> renderObj(new HelloShader());
-	// unique_ptr<Renderable> renderObj(new HelloTexture());
-	// unique_ptr<Renderable> renderObj(new HelloTransform());
-	// unique_ptr<Renderable> renderObj(new HelloCoordinate(800, 600));
-	// renderObj = new HelloCoordinate(800, 600);
 	glfwInit();
 	// 主次版本
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

@@ -84,13 +84,15 @@ void HelloLightTexture::init() {
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	loadTexture("assets/texture/container2.png");
+	texture1 = loadTexture("assets/texture/container2.png");
+	texture2 = loadTexture("assets/texture/container2_specular.png");
+
+	objectShader.use();
+    objectShader.setInt("material.diffuse", 0);
+    objectShader.setInt("material.specular", 1);
 }
 
 void HelloLightTexture::onCreate() {
@@ -136,7 +138,7 @@ void HelloLightTexture::onMouseMoved(double xposIn, double yposIn) {
 }
 
 void HelloLightTexture::onRender() {
-	float currentTime = (float)glfwGetTime();
+	float currentTime = static_cast<float>(glfwGetTime());
 	// lightPos.x = 1.0f + sin(currentTime) * 2.0f;
 	// lightPos.y = sin(currentTime / 2.0f) * 1.0f;
 	deltaTime = currentTime - lastTime;
@@ -146,13 +148,11 @@ void HelloLightTexture::onRender() {
 	// 透视角度
 	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);
 
-	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	objectShader.use();
 	objectShader.setVec3("viewPos", camera.position);
-	objectShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-	objectShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-	objectShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+	// objectShader.setInt("material.diffuse", 0);
+	// objectShader.setInt("material.specular", 1);
 	objectShader.setFloat("material.shininess", 32.0f);
 
 
@@ -164,14 +164,21 @@ void HelloLightTexture::onRender() {
 	// 环境光照通常会设置为一个比较低的强度，因为我们不希望环境光颜色太过显眼。
 	// 光源的漫反射分量通常设置为光所具有的颜色，通常是一个比较明亮的白色。
 	// 镜面光分量通常会保持为vec3(1.0)，以最大强度发光
-	objectShader.setInt("light.diffuse", 0);
+	objectShader.setVec3("light.ambient", glm::vec3(0.2f)); 
+	objectShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 	objectShader.setVec3("light.position", lightPos);
 
-	model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	// model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	objectShader.setMat4("model", model);
 	objectShader.setMat4("view", camera.getViewMat());
 	objectShader.setMat4("projection", projection);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
 	glBindVertexArray(objectVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -191,6 +198,8 @@ void HelloLightTexture::onDestroy() {
 	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteVertexArrays(1, &objectVAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteTextures(1, &texture1);
+	glDeleteTextures(1, &texture2);
 	lightShader.release();
 	objectShader.release();
 }

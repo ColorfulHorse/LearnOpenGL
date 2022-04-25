@@ -6,6 +6,6 @@
 #include <iostream>
 #include "stb_image.h"
 
-void loadTexture(const char* path);
+uint32_t loadTexture(const char* path);
 
 #endif
