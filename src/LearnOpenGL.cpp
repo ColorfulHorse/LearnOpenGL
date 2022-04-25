@@ -13,6 +13,7 @@
 #include "helloCamera.h"
 #include "helloLight.h"
 #include "helloMaterial.h"
+#include "helloLightTexture.h"
 
 using namespace std;
 
@@ -66,7 +67,8 @@ int main() {
 
 	// renderObj = new HelloCamera(window);
 	// renderObj = new HelloLight(window);
-	renderObj = new HelloMaterial(window);
+	// renderObj = new HelloMaterial(window);
+	renderObj = new HelloLightTexture(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
