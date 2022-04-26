@@ -8,7 +8,7 @@
 class HelloLightTexture : public Renderable {
 public:
 	uint32_t VBO, lightVAO, objectVAO;
-	uint32_t texture1, texture2;
+	uint32_t texture1, texture2, texture3;
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	float deltaTime = 0.0f;
 	float lastTime = 0.0f;

@@ -65,8 +65,8 @@ void HelloLight::init() {
     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
-	lightShader = Shader("shaders/light/lightSource.vs", "shaders/light/lightSource.fs");
-	objectShader = Shader("shaders/light/object.vs", "shaders/light/object.fs");
+	lightShader = Shader(FileSystem::getPath("shaders/light/lightSource.vs").c_str(), FileSystem::getPath("shaders/light/lightSource.fs").c_str());
+	objectShader = Shader(FileSystem::getPath("shaders/light/object.vs").c_str(), FileSystem::getPath("shaders/light/object.fs").c_str());
 	
 
 	glGenVertexArrays(1, &lightVAO);

@@ -19,7 +19,7 @@ void HelloTexture::initTexture() {
 		0, 1, 3,
 		1, 2, 3};
 
-	Shader shader("shaders/helloTexture.vs", "shaders/helloTexture.fs");
+	Shader shader(FileSystem::getPath("shaders/helloTexture.vs").c_str(), FileSystem::getPath("shaders/helloTexture.fs").c_str());
 	shaderProgram = shader.id;
 
 	glGenVertexArrays(1, &VAO);
@@ -53,7 +53,7 @@ void HelloTexture::initTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	int32_t width, height, channels;
-	stbi_uc *data = stbi_load("assets/texture/container.jpg", &width, &height, &channels, 0);
+	stbi_uc *data = stbi_load(FileSystem::getPath("assets/texture/container.jpg").c_str(), &width, &height, &channels, 0);
 	if (data) {
 		// 根据图片创建纹理
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -72,7 +72,7 @@ void HelloTexture::initTexture() {
 	// 放大缩小时平滑过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	data = stbi_load("assets/texture/awesomeface.png", &width, &height, &channels, 0);
+	data = stbi_load(FileSystem::getPath("assets/texture/awesomeface.png").c_str(), &width, &height, &channels, 0);
 	if (data) {
 		// 根据图片创建纹理
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);

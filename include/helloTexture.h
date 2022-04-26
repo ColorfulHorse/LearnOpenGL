@@ -1,4 +1,6 @@
 #pragma once
+#ifndef HELLOTEXTURE_H
+#define HELLOTEXTURE_H
 #include "renderable.h"
 #include <cstdint>
 
@@ -11,3 +13,5 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 };
+
+#endif

@@ -65,8 +65,8 @@ void HelloMaterial::init() {
 		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 	};
 		
-	lightShader = Shader("shaders/material/lightSource.vs", "shaders/material/lightSource.fs");
-	objectShader = Shader("shaders/material/object.vs", "shaders/material/object.fs");
+	lightShader = Shader(FileSystem::getPath("shaders/material/lightSource.vs").c_str(), FileSystem::getPath("shaders/material/lightSource.fs").c_str());
+	objectShader = Shader(FileSystem::getPath("shaders/material/object.vs").c_str(), FileSystem::getPath("shaders/material/object.fs").c_str());
 
 	glGenVertexArrays(1, &lightVAO);
 	glGenVertexArrays(1, &objectVAO);

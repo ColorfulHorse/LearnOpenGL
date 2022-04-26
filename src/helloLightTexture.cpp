@@ -61,8 +61,8 @@ void HelloLightTexture::init() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 		
-	lightShader = Shader("shaders/lightTexture/lightSource.vs", "shaders/lightTexture/lightSource.fs");
-	objectShader = Shader("shaders/lightTexture/object.vs", "shaders/lightTexture/object.fs");
+	lightShader = Shader(FileSystem::getPath("shaders/lightTexture/lightSource.vs").c_str(), FileSystem::getPath("shaders/lightTexture/lightSource.fs").c_str());
+	objectShader = Shader(FileSystem::getPath("shaders/lightTexture/object.vs").c_str(), FileSystem::getPath("shaders/lightTexture/object.fs").c_str());
 
 	glGenVertexArrays(1, &lightVAO);
 	glGenVertexArrays(1, &objectVAO);
@@ -87,12 +87,14 @@ void HelloLightTexture::init() {
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	texture1 = loadTexture("assets/texture/container2.png");
-	texture2 = loadTexture("assets/texture/container2_specular.png");
+	texture1 = loadTexture(FileSystem::getPath("assets/texture/container2.png").c_str());
+	texture2 = loadTexture(FileSystem::getPath("assets/texture/container2_specular.png").c_str());
+	texture3 = loadTexture(FileSystem::getPath("assets/texture/matrix.jpg").c_str());
 
 	objectShader.use();
     objectShader.setInt("material.diffuse", 0);
     objectShader.setInt("material.specular", 1);
+	objectShader.setInt("material.emission", 2);
 }
 
 void HelloLightTexture::onCreate() {
@@ -178,6 +180,8 @@ void HelloLightTexture::onRender() {
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texture3);
 
 	glBindVertexArray(objectVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -200,6 +204,7 @@ void HelloLightTexture::onDestroy() {
 	glDeleteBuffers(1, &VBO);
 	glDeleteTextures(1, &texture1);
 	glDeleteTextures(1, &texture2);
+	glDeleteTextures(1, &texture3);
 	lightShader.release();
 	objectShader.release();
 }

@@ -1,4 +1,7 @@
 #pragma once
+#ifndef HELLOSHADER_H
+#define HELLOSHADER_H
+
 #include "renderable.h"
 #include <cstdint>
 
@@ -11,3 +14,4 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 };
+#endif

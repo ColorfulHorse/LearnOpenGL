@@ -1,4 +1,7 @@
 #pragma once
+#ifndef HELLOTRIANGLE_H
+#define HELLOTRIANGLE_H
+
 #include "renderable.h"
 #include <cstdint>
 
@@ -11,3 +14,5 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 };
+
+#endif
