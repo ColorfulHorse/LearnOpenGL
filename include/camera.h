@@ -73,7 +73,7 @@ public:
     }
 
     glm::mat4 getViewMat() {
-        return glm::lookAt(position, front + position, worldUp);
+        return glm::lookAt(position, front + position, up);
     }
 
 
