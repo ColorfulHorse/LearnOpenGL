@@ -62,9 +62,9 @@ int main() {
 
 	// renderObj = new HelloCamera(window);
 	// renderObj = new HelloLight(window);
-	renderObj = new HelloMaterial(window);
+	// renderObj = new HelloMaterial(window);
 	// renderObj = new HelloLightTexture(window);
-	// renderObj = new HelloRealLight(window);
+	renderObj = new HelloRealLight(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
