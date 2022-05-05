@@ -172,8 +172,8 @@ void HelloRealLight::onRender() {
 	objectShader.setFloat("light.constant", 1.0f);
 	objectShader.setFloat("light.linear", 0.09f);
 	objectShader.setFloat("light.quadratic", 0.032f);
-	objectShader.setFloat("light.cutOff", glm::cos(glm::radians(15.0f)));
-	objectShader.setFloat("light.outerCutOff", glm::cos(glm::radians(25.0f)));
+	objectShader.setFloat("light.cutOff", glm::cos(glm::radians(10.0f)));
+	objectShader.setFloat("light.outerCutOff", glm::cos(glm::radians(15.0f)));
 
 	// model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	// objectShader.setMat4("model", model);
