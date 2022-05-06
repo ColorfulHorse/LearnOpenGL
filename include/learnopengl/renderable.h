@@ -5,8 +5,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "shader.h"
-#include "filesystem.h"
+#include <learnopengl/shader.h>
+#include <learnopengl/filesystem.h>
 class Renderable {
 public:
 	virtual void onCreate() = 0;

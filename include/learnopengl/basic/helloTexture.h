@@ -1,7 +1,7 @@
 #pragma once
 #ifndef HELLOTEXTURE_H
 #define HELLOTEXTURE_H
-#include "renderable.h"
+#include <learnopengl/renderable.h>
 #include <cstdint>
 
 class HelloTexture : public Renderable {

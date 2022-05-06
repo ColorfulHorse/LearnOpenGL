@@ -2,7 +2,7 @@
 #ifndef HELLOTRIANGLE_H
 #define HELLOTRIANGLE_H
 
-#include "renderable.h"
+#include <learnopengl/renderable.h>
 #include <cstdint>
 
 class HelloTriangle : public Renderable {

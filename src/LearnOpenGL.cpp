@@ -5,16 +5,16 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "helloTriangle.h"
-#include "helloShader.h"
-#include "helloTexture.h"
-#include "helloTransform.h"
-#include "helloCoordinate.h"
-#include "helloCamera.h"
-#include "helloLight.h"
-#include "helloMaterial.h"
-#include "helloLightTexture.h"
-#include "helloRealLight.h"
+#include <learnopengl/basic/helloTriangle.h>
+#include <learnopengl/basic/helloShader.h>
+#include <learnopengl/basic/helloTexture.h>
+#include <learnopengl/basic/helloTransform.h>
+#include <learnopengl/basic/helloCoordinate.h>
+#include <learnopengl/basic/helloCamera.h>
+#include <learnopengl/light/helloLight.h>
+#include <learnopengl/light/helloMaterial.h>
+#include <learnopengl/light/helloLightTexture.h>
+#include <learnopengl/light/helloRealLight.h>
 
 using namespace std;
 

@@ -1,9 +1,9 @@
 #ifndef HELLOREALLIGHT_H
 #define HELLOREALLIGHT_H
-#include "renderable.h"
+#include <learnopengl/renderable.h>
 #include <cstdint>
 #include <glm/glm.hpp>
-#include "camera.h"
+#include <learnopengl/camera.h>
 
 class HelloRealLight : public Renderable {
 public:

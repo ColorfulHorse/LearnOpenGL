@@ -1,11 +1,11 @@
-#ifndef HELLOMATERIAL_H
-#define HELLOMATERIAL_H
-#include "renderable.h"
+#ifndef HELLOLIGHT_H
+#define HELLOLIGHT_H
+#include <learnopengl/renderable.h>
 #include <cstdint>
 #include <glm/glm.hpp>
-#include "camera.h"
+#include <learnopengl/camera.h>
 
-class HelloMaterial : public Renderable {
+class HelloLight : public Renderable {
 public:
 	uint32_t VBO, lightVAO, objectVAO;
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -23,7 +23,7 @@ public:
 	virtual void onDestroy();
 	virtual void onProcessInput();
 	virtual void onMouseMoved(double xPos, double yPos);
-	HelloMaterial(GLFWwindow *win): Renderable(win){}
+	HelloLight(GLFWwindow *win): Renderable(win){}
 };
 
 #endif

@@ -1,13 +1,13 @@
-﻿#include "helloRealLight.h"
+﻿#include <learnopengl/light/helloRealLight.h>
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#include "shader.h"
+#include <learnopengl/shader.h>
 #include "stb_image.h"
-#include "utils.h"
+#include <learnopengl/utils.h>
 
 using namespace std;
 

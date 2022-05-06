@@ -1,4 +1,4 @@
-#include "helloShader.h"
+#include <learnopengl/basic/helloShader.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>

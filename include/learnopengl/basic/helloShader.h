@@ -2,7 +2,7 @@
 #ifndef HELLOSHADER_H
 #define HELLOSHADER_H
 
-#include "renderable.h"
+#include <learnopengl/renderable.h>
 #include <cstdint>
 
 class HelloShader : public Renderable {

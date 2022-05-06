@@ -1,5 +1,5 @@
-﻿#include "helloMaterial.h"
-#include "shader.h"
+﻿#include <learnopengl/light/helloMaterial.h>
+#include <learnopengl/shader.h>
 #include "stb_image.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>

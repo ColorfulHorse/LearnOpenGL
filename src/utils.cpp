@@ -1,4 +1,4 @@
-#include "utils.h"
+#include <learnopengl/utils.h>
 
 uint32_t loadTexture(const char* path) {
 	uint32_t textureId;

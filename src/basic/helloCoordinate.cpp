@@ -1,18 +1,22 @@
-﻿#include "helloCamera.h"
-#include <iostream>
+﻿#include <learnopengl/basic/helloCoordinate.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "stb_image.h"
-#include "shader.h"
+#include <learnopengl/shader.h>
 
 using namespace std;
 
-void HelloCamera::init() {
-	// 隐藏鼠标光标
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+void HelloCoordinate::init() {
+	// float vertices[] = {
+	// 	// 位置*3 颜色*3 纹理*2
+	// 	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,	  // 右上
+	// 	0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // 右下
+	// 	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
+	// 	-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f	  // 左上
+	// };
 	glEnable(GL_DEPTH_TEST);
 	float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -58,7 +62,7 @@ void HelloCamera::init() {
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-	shader = Shader(FileSystem::getPath("shaders/helloCamera.vs").c_str(), FileSystem::getPath("shaders/helloCamera.fs").c_str());
+	shader = Shader(FileSystem::getPath("shaders/helloCoordinate.vs").c_str(), FileSystem::getPath("shaders/helloCoordinate.fs").c_str());
 	shaderProgram = shader.id;
 
 	glGenVertexArrays(1, &VAO);
@@ -120,69 +124,11 @@ void HelloCamera::init() {
 	shader.setInt("texture2", 1);
 }
 
-void HelloCamera::onCreate() {
+void HelloCoordinate::onCreate() {
 	init();
 }
 
-/* 
- * 根据键盘输入平移视角
- */
-void HelloCamera::onProcessInput() {
-	// W S A D 前后左右移动摄像机
-	float speed = deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {	
-		camera.processKeyboard(FORWARD, deltaTime);
-	}else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.processKeyboard(BACKWARD, deltaTime);
-	}else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		// 叉乘 +X * +Y = +Z  +Y * +X = -Z
-		camera.processKeyboard(LEFT, deltaTime);
-	}else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.processKeyboard(RIGHT, deltaTime);
-	}
-	
-}
-/* 
- * 根据鼠标移动旋转视角
- */
-void HelloCamera::onMouseMoved(double xposIn, double yposIn) {
-	float xPos = static_cast<float>(xposIn);
-    float yPos = static_cast<float>(yposIn);
-	if (firstMove) {
-		lastX = xPos;
-		lastY = yPos;
-		firstMove = false;
-	}
-	
-	// 灵敏度
-	float sensitivity = 0.1f;
-	float offsetX = xPos - lastX;
-	float offsetY = lastY - yPos;
-	lastX = xPos;
-	lastY = yPos;
-	camera.processMouseMovement(offsetX, offsetY);
-	// yaw += offsetX * sensitivity;
-	// pitch += offsetY * sensitivity;
-	// // 限制俯仰角避免翻转现象
-	// if (pitch > 89.0f) {
-	// 	pitch = 89.0f;
-	// } else if (pitch < -89.0f) {
-	// 	pitch = -89.0f;
-	// }
-	
-	// // 根据向量的两次投影计算出摄像机朝向向量
-	// // 初始pitch yaw都为0时，x=1, y=0, z=0，摄像头实际上指向了x轴正半轴
-	// // 所以初始yaw需要是-90，x=0 y=0 z=-1， 指向z轴负半轴
-	// cameraFront.x = cos(glm::radians(pitch)) * cos(glm::radians((yaw)));
-	// cameraFront.y = sin(glm::radians(pitch));
-	// cameraFront.z = cos(glm::radians(pitch)) * sin(glm::radians((yaw)));
-	// cameraFront = glm::normalize(cameraFront);
-}
-
-void HelloCamera::onRender() {
-	float currentTime = (float) glfwGetTime();
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
+void HelloCoordinate::onRender() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
@@ -190,34 +136,29 @@ void HelloCamera::onRender() {
 
 	shader.use();
 	glBindVertexArray(VAO);
-	// glm::mat4 model(1.0f);
-	// glm::mat4 view(1.0f);
+	glm::mat4 view(1.0f);
 	glm::mat4 projection(1.0f);
-	// 绕x轴旋转
-	// model = glm::rotate(model, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	// 向z轴后移
-	// 创建一个相机，绕y轴顺时针旋转，半径为10
-	// float raduis = 10.0f;
-	// float cameraX = static_cast<float>((raduis * sin(glfwGetTime())));
-	// float cameraZ = static_cast<float>(raduis * cos(glfwGetTime()));
-	// view = glm::lookAt(glm::vec3(cameraX, 0.0f, cameraZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	// view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
-	// 透视角度
-	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);
-	// shader.setMat4("model", model);
-	shader.setMat4("view", camera.getViewMat());
-	shader.setMat4("projection", projection);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	// 向后移
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	projection = glm::perspective(glm::radians(45.0f), 800 * 1.0f / 600, 0.1f, 100.0f);
+	uint32_t viewLoc = glGetUniformLocation(shaderProgram, "view");
+	uint32_t proLoc = glGetUniformLocation(shaderProgram, "projection");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(proLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	drawMulti();
+}
+
+void HelloCoordinate::drawMulti() {
 	for (size_t i = 0; i < 10; i++) {
 		glm::mat4 model(1.0f);
 		model = glm::translate(model, cubePositions[i]);
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(i * 20.0f), glm::vec3(0.2f, 0.3f, 0.6f));
 		shader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 }
 
-
-void HelloCamera::onDestroy() {
+void HelloCoordinate::onDestroy() {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteTextures(1, &texture1);

@@ -1,11 +1,11 @@
-﻿#include "helloTransform.h"
+﻿#include <learnopengl/basic/helloTransform.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "stb_image.h"
-#include "shader.h"
+#include <learnopengl/shader.h>
 
 using namespace std;
 

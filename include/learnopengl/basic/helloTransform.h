@@ -1,6 +1,6 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
-#include "renderable.h"
+#include <learnopengl/renderable.h>
 #include <cstdint>
 
 class HelloTransform : public Renderable {
