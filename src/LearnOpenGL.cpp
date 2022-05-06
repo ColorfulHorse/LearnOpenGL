@@ -1,7 +1,7 @@
 ﻿// LearnOpenGL.cpp : Defines the entry point for the application.
 //
 
-#include "LearnOpenGL.h"
+#include <learnopengl/LearnOpenGL.h>
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
