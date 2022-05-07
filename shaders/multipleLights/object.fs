@@ -45,7 +45,7 @@ struct SpotLight {
     float cutOff;
     // 外切光角，用于平滑过渡
     float outerCutOff;
-}
+};
 
 #define NR_POINT_LIGHTS 4
 
@@ -87,6 +87,8 @@ vec3 calDirLight(DirLight light, vec3 norm, vec3 viewDirection) {
     vec3 specular = light.specular * spec * texture(material.diffuse, texCoord).rgb;
 
     vec3 res = ambient + diffuse + specular;
+
+    return res;
 }
 
 vec3 calPointLight(PointLight light, vec3 norm, vec3 viewDirection) { 

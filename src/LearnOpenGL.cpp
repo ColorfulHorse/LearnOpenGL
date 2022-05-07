@@ -15,6 +15,7 @@
 #include <learnopengl/light/helloMaterial.h>
 #include <learnopengl/light/helloLightTexture.h>
 #include <learnopengl/light/helloRealLight.h>
+#include <learnopengl/light/multipleLights.h>
 
 using namespace std;
 
@@ -64,7 +65,8 @@ int main() {
 	// renderObj = new HelloLight(window);
 	// renderObj = new HelloMaterial(window);
 	// renderObj = new HelloLightTexture(window);
-	renderObj = new HelloRealLight(window);
+	// renderObj = new HelloRealLight(window);
+	renderObj = new MultipleLights(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);

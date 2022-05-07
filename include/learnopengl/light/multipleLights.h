@@ -1,5 +1,5 @@
-#ifndef HELLOREALLIGHT_H
-#define HELLOREALLIGHT_H
+#ifndef MULTIPLELIGHTS_H
+#define MULTIPLELIGHTS_H
 #include <learnopengl/renderable.h>
 #include <cstdint>
 #include <glm/glm.hpp>

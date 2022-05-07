@@ -151,27 +151,25 @@ void MultipleLights::onRender() {
 
 	objectShader.use();
 	objectShader.setVec3("viewPos", camera.position);
-	// objectShader.setInt("material.diffuse", 0);
-	// objectShader.setInt("material.specular", 1);
 	objectShader.setFloat("material.shininess", 32.0f);
 
 
 	// 动态更新光的颜色
 	glm:: vec3 lightColor(1.0f);
-	lightColor.x = sin(currentTime * 0.3f);
-	lightColor.y = sin(currentTime * 1.2f);
-	lightColor.z = sin(currentTime * 0.6f);
+	// lightColor.x = sin(currentTime * 0.3f);
+	// lightColor.y = sin(currentTime * 1.2f);
+	// lightColor.z = sin(currentTime * 0.6f);
 	// 环境光照通常会设置为一个比较低的强度，因为我们不希望环境光颜色太过显眼。
 	// 光源的漫反射分量通常设置为光所具有的颜色，通常是一个比较明亮的白色。
 	// 镜面光分量通常会保持为vec3(1.0)，以最大强度发光
-	objectShader.setVec3("dirLight.ambient", glm::vec3(0.1f)); 
-	objectShader.setVec3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
-	objectShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
-	objectShader.setVec3("dirLight.direction", camera.front);
+	objectShader.setVec3("dirLight.ambient", glm::vec3(0.05f)); 
+	objectShader.setVec3("dirLight.diffuse", glm::vec3(0.5f));
+	objectShader.setVec3("dirLight.specular", glm::vec3(0.4f));
+	objectShader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
 
-	objectShader.setVec3("spotLight.ambient", glm::vec3(0.1f)); 
-	objectShader.setVec3("spotLight.diffuse", 0.5f, 0.5f, 0.5f);
-	objectShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+	objectShader.setVec3("spotLight.ambient", glm::vec3(0.0f)); 
+	objectShader.setVec3("spotLight.diffuse", glm::vec3(1.0f));
+	objectShader.setVec3("spotLight.specular", glm::vec3(1.0f));
 	objectShader.setVec3("spotLight.position", camera.position);
 	objectShader.setVec3("spotLight.direction", camera.front);
 	objectShader.setFloat("spotLight.constant", 1.0f);
@@ -180,16 +178,47 @@ void MultipleLights::onRender() {
 	objectShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(10.0f)));
 	objectShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
-	for (size_t i = 0; i < 4; i++) {
-		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].ambient", glm::vec3(0.1f)); 
-		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].diffuse", 0.5f, 0.5f, 0.5f);
-		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].specular", 1.0f, 1.0f, 1.0f);
-		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].position", camera.position);
-		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].constant", 1.0f);
-		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].linear", 0.09f);
-		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].quadratic", 0.032f);
-	}
-	
+	// for (size_t i = 0; i < 4; i++) {
+	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].ambient", glm::vec3(0.05f)); 
+	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].diffuse", glm::vec3(0.8f));
+	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].specular", glm::vec3(1.0f));
+	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].position", pointLights[i]);
+	// 	objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].constant", 1.0f);
+	// 	objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].linear", 0.09f);
+	// 	objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].quadratic", 0.032f);
+	// }
+
+	objectShader.setVec3("pointLights[0].position", pointLights[0]);
+	objectShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+	objectShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+	objectShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+	objectShader.setFloat("pointLights[0].constant", 1.0f);
+	objectShader.setFloat("pointLights[0].linear", 0.09f);
+	objectShader.setFloat("pointLights[0].quadratic", 0.032f);
+	// point light 2
+	objectShader.setVec3("pointLights[1].position", pointLights[1]);
+	objectShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+	objectShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+	objectShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+	objectShader.setFloat("pointLights[1].constant", 1.0f);
+	objectShader.setFloat("pointLights[1].linear", 0.09f);
+	objectShader.setFloat("pointLights[1].quadratic", 0.032f);
+	// point light 3
+	objectShader.setVec3("pointLights[2].position", pointLights[2]);
+	objectShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+	objectShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+	objectShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+	objectShader.setFloat("pointLights[2].constant", 1.0f);
+	objectShader.setFloat("pointLights[2].linear", 0.09f);
+	objectShader.setFloat("pointLights[2].quadratic", 0.032f);
+	// point light 4
+	objectShader.setVec3("pointLights[3].position", pointLights[3]);
+	objectShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+	objectShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+	objectShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+	objectShader.setFloat("pointLights[3].constant", 1.0f);
+	objectShader.setFloat("pointLights[3].linear", 0.09f);
+	objectShader.setFloat("pointLights[3].quadratic", 0.032f);
 
 	objectShader.setMat4("view", camera.getViewMat());
 	objectShader.setMat4("projection", projection);
@@ -209,16 +238,19 @@ void MultipleLights::onRender() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
-	// lightShader.use();
-	// glm::mat4 model = glm::mat4(1.0f);
-	// model = glm::translate(model, lightPos);
-	// model = glm::scale(model, glm::vec3(0.2f));
-	// lightShader.setVec3("lightColor", lightColor);
-	// lightShader.setMat4("model", model);
-	// lightShader.setMat4("view", camera.getViewMat());
-	// lightShader.setMat4("projection", projection);
-	// glBindVertexArray(lightVAO);
-	// glDrawArrays(GL_TRIANGLES, 0, 36);
+	lightShader.use();
+	lightShader.setVec3("lightColor", lightColor);
+	lightShader.setMat4("view", camera.getViewMat());
+	lightShader.setMat4("projection", projection);
+	glBindVertexArray(lightVAO);
+
+	for (size_t i = 0; i < 10; i++) {
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, pointLights[i]);
+		model = glm::scale(model, glm::vec3(0.2f));
+		lightShader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 }
 
 void MultipleLights::onDestroy() {
