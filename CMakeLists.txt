@@ -6,6 +6,7 @@ set(CXX_STANDARD 11)
 file(GLOB_RECURSE SRC_LIST "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c")
 
 set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/bin")
+set(LIBS_DIR "${PROJECT_SOURCE_DIR}/libs")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIR}")
@@ -17,32 +18,21 @@ configure_file(configuration/root_directory.h.in configuration/root_directory.h)
 include_directories(${CMAKE_BINARY_DIR}/configuration)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-link_directories(${PROJECT_SOURCE_DIR}/libs)
+link_directories(${LIBS_DIR})
 
 add_executable(LearnOpenGL ${SRC_LIST})
 
-# file(GLOB_RECURSE SHADER_LIST "${PROJECT_SOURCE_DIR}/shaders/*")
-# file(GLOB_RECURSE ASSET_LIST "${PROJECT_SOURCE_DIR}/assets/*")
+file(GLOB_RECURSE LIB_LIST ${LIBS_DIR}/*.dll)
 
 # 链接前拷贝资源文件
-# add_custom_command(TARGET LearnOpenGL PRE_LINK
-# 	COMMENT "copy ${SHADER_LIST}"
-# 	COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-# 	${SHADER_LIST} ${ASSET_LIST} "${CMAKE_BINARY_DIR}/output/")
-
-# 链接前拷贝资源文件
-# add_custom_command(TARGET LearnOpenGL PRE_BUILD
-# 	COMMENT "copy_dictionary"
-# 	COMMAND ${CMAKE_COMMAND} -E copy_directory
-# 	"${PROJECT_SOURCE_DIR}/shaders" "${OUTPUT_DIR}/shaders")
-
-# add_custom_command(TARGET LearnOpenGL PRE_BUILD
-# 	COMMENT "copy_dictionary"
-# 	COMMAND ${CMAKE_COMMAND} -E copy_directory
-# 	"${PROJECT_SOURCE_DIR}/assets" "${OUTPUT_DIR}/assets")
+add_custom_command(TARGET LearnOpenGL PRE_LINK
+	COMMENT "copy ${LIB_LIST}"
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+	${LIB_LIST} ${OUTPUT_DIR})
 
 target_link_libraries(
 	LearnOpenGL
+	assimp
 	glfw3
 	opengl32
 )

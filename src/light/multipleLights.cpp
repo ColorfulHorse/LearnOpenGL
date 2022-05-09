@@ -8,10 +8,12 @@
 #include <learnopengl/shader.h>
 #include "stb_image.h"
 #include <learnopengl/utils.h>
+#include <assimp/Importer.hpp>
 
 using namespace std;
 
 void MultipleLights::init() {
+	Assimp::Importer importer;
 	// 隐藏鼠标光标
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glEnable(GL_DEPTH_TEST);
@@ -187,38 +189,6 @@ void MultipleLights::onRender() {
 		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].linear", 0.09f);
 		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].quadratic", 0.032f);
 	}
-
-	// objectShader.setVec3("pointLights[0].position", pointLights[0]);
-	// objectShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-	// objectShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-	// objectShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-	// objectShader.setFloat("pointLights[0].constant", 1.0f);
-	// objectShader.setFloat("pointLights[0].linear", 0.09f);
-	// objectShader.setFloat("pointLights[0].quadratic", 0.032f);
-	// // point light 2
-	// objectShader.setVec3("pointLights[1].position", pointLights[1]);
-	// objectShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-	// objectShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-	// objectShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-	// objectShader.setFloat("pointLights[1].constant", 1.0f);
-	// objectShader.setFloat("pointLights[1].linear", 0.09f);
-	// objectShader.setFloat("pointLights[1].quadratic", 0.032f);
-	// // point light 3
-	// objectShader.setVec3("pointLights[2].position", pointLights[2]);
-	// objectShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-	// objectShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-	// objectShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-	// objectShader.setFloat("pointLights[2].constant", 1.0f);
-	// objectShader.setFloat("pointLights[2].linear", 0.09f);
-	// objectShader.setFloat("pointLights[2].quadratic", 0.032f);
-	// // point light 4
-	// objectShader.setVec3("pointLights[3].position", pointLights[3]);
-	// objectShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-	// objectShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-	// objectShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-	// objectShader.setFloat("pointLights[3].constant", 1.0f);
-	// objectShader.setFloat("pointLights[3].linear", 0.09f);
-	// objectShader.setFloat("pointLights[3].quadratic", 0.032f);
 
 	objectShader.setMat4("view", camera.getViewMat());
 	objectShader.setMat4("projection", projection);
