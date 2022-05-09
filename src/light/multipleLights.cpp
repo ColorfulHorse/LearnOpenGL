@@ -75,9 +75,8 @@ void MultipleLights::init() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 
-	// glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
 	glBindVertexArray(objectVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 
@@ -163,8 +162,8 @@ void MultipleLights::onRender() {
 	// 光源的漫反射分量通常设置为光所具有的颜色，通常是一个比较明亮的白色。
 	// 镜面光分量通常会保持为vec3(1.0)，以最大强度发光
 	objectShader.setVec3("dirLight.ambient", glm::vec3(0.05f)); 
-	objectShader.setVec3("dirLight.diffuse", glm::vec3(0.5f));
-	objectShader.setVec3("dirLight.specular", glm::vec3(0.4f));
+	objectShader.setVec3("dirLight.diffuse", glm::vec3(0.4f));
+	objectShader.setVec3("dirLight.specular", glm::vec3(0.5f));
 	objectShader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
 
 	objectShader.setVec3("spotLight.ambient", glm::vec3(0.0f)); 
@@ -175,50 +174,51 @@ void MultipleLights::onRender() {
 	objectShader.setFloat("spotLight.constant", 1.0f);
 	objectShader.setFloat("spotLight.linear", 0.09f);
 	objectShader.setFloat("spotLight.quadratic", 0.032f);
-	objectShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(10.0f)));
+	objectShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
 	objectShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
-	// for (size_t i = 0; i < 4; i++) {
-	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].ambient", glm::vec3(0.05f)); 
-	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].diffuse", glm::vec3(0.8f));
-	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].specular", glm::vec3(1.0f));
-	// 	objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].position", pointLights[i]);
-	// 	objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].constant", 1.0f);
-	// 	objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].linear", 0.09f);
-	// 	objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].quadratic", 0.032f);
-	// }
 
-	objectShader.setVec3("pointLights[0].position", pointLights[0]);
-	objectShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-	objectShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-	objectShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-	objectShader.setFloat("pointLights[0].constant", 1.0f);
-	objectShader.setFloat("pointLights[0].linear", 0.09f);
-	objectShader.setFloat("pointLights[0].quadratic", 0.032f);
-	// point light 2
-	objectShader.setVec3("pointLights[1].position", pointLights[1]);
-	objectShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-	objectShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-	objectShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-	objectShader.setFloat("pointLights[1].constant", 1.0f);
-	objectShader.setFloat("pointLights[1].linear", 0.09f);
-	objectShader.setFloat("pointLights[1].quadratic", 0.032f);
-	// point light 3
-	objectShader.setVec3("pointLights[2].position", pointLights[2]);
-	objectShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-	objectShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-	objectShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-	objectShader.setFloat("pointLights[2].constant", 1.0f);
-	objectShader.setFloat("pointLights[2].linear", 0.09f);
-	objectShader.setFloat("pointLights[2].quadratic", 0.032f);
-	// point light 4
-	objectShader.setVec3("pointLights[3].position", pointLights[3]);
-	objectShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-	objectShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-	objectShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-	objectShader.setFloat("pointLights[3].constant", 1.0f);
-	objectShader.setFloat("pointLights[3].linear", 0.09f);
-	objectShader.setFloat("pointLights[3].quadratic", 0.032f);
+	for (size_t i = 0; i < 4; i++) {
+		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].ambient", glm::vec3(0.05f)); 
+		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].diffuse", glm::vec3(0.8f));
+		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].specular", glm::vec3(1.0f));
+		objectShader.setVec3(std::string("pointLights") + "[" + std::to_string(i) + "].position", pointLights[i]);
+		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].constant", 1.0f);
+		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].linear", 0.09f);
+		objectShader.setFloat(std::string("pointLights") + "[" + std::to_string(i) + "].quadratic", 0.032f);
+	}
+
+	// objectShader.setVec3("pointLights[0].position", pointLights[0]);
+	// objectShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+	// objectShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+	// objectShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+	// objectShader.setFloat("pointLights[0].constant", 1.0f);
+	// objectShader.setFloat("pointLights[0].linear", 0.09f);
+	// objectShader.setFloat("pointLights[0].quadratic", 0.032f);
+	// // point light 2
+	// objectShader.setVec3("pointLights[1].position", pointLights[1]);
+	// objectShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+	// objectShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+	// objectShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+	// objectShader.setFloat("pointLights[1].constant", 1.0f);
+	// objectShader.setFloat("pointLights[1].linear", 0.09f);
+	// objectShader.setFloat("pointLights[1].quadratic", 0.032f);
+	// // point light 3
+	// objectShader.setVec3("pointLights[2].position", pointLights[2]);
+	// objectShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+	// objectShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+	// objectShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+	// objectShader.setFloat("pointLights[2].constant", 1.0f);
+	// objectShader.setFloat("pointLights[2].linear", 0.09f);
+	// objectShader.setFloat("pointLights[2].quadratic", 0.032f);
+	// // point light 4
+	// objectShader.setVec3("pointLights[3].position", pointLights[3]);
+	// objectShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+	// objectShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+	// objectShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+	// objectShader.setFloat("pointLights[3].constant", 1.0f);
+	// objectShader.setFloat("pointLights[3].linear", 0.09f);
+	// objectShader.setFloat("pointLights[3].quadratic", 0.032f);
 
 	objectShader.setMat4("view", camera.getViewMat());
 	objectShader.setMat4("projection", projection);
@@ -242,8 +242,8 @@ void MultipleLights::onRender() {
 	lightShader.setVec3("lightColor", lightColor);
 	lightShader.setMat4("view", camera.getViewMat());
 	lightShader.setMat4("projection", projection);
-	glBindVertexArray(lightVAO);
 
+	glBindVertexArray(lightVAO);
 	for (size_t i = 0; i < 10; i++) {
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, pointLights[i]);

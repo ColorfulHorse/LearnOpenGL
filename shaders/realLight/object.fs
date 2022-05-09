@@ -56,7 +56,7 @@ void main() {
     vec3 norm = normalize(normal);
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0f);
-    vec3 diffuse = light.diffuse * tex;
+    vec3 diffuse = light.diffuse * diff * tex;
 
     // 视线向量
     vec3 viewDirection = normalize(worldPos - viewPos);
@@ -67,7 +67,7 @@ void main() {
     // 反光度
     spec = pow(spec, material.shininess);
     // vec3 specular = light.specular * (spec * vec3(1.0, 1.0, 1.0));
-    vec3 specular = light.specular * spec * texture(material.diffuse, texCoord).rgb;
+    vec3 specular = light.specular * spec * texture(material.specular, texCoord).rgb;
     float distance = length(light.position - worldPos);
     // 距离衰减
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
