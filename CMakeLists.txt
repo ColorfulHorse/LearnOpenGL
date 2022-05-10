@@ -4,7 +4,7 @@ project("LearnOpenGL")
 set(CXX_STANDARD 11)
 
 file(GLOB_RECURSE SRC_LIST "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c")
-
+file(GLOB_RECURSE INCLUDE_LIST "${PROJECT_SOURCE_DIR}/include/*.h" "${PROJECT_SOURCE_DIR}/include/*.hpp")
 set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/bin")
 set(LIBS_DIR "${PROJECT_SOURCE_DIR}/libs")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIR}")
@@ -20,7 +20,7 @@ include_directories(${CMAKE_BINARY_DIR}/configuration)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBS_DIR})
 
-add_executable(LearnOpenGL ${SRC_LIST})
+add_executable(LearnOpenGL ${SRC_LIST} ${INCLUDE_LIST})
 
 file(GLOB_RECURSE LIB_LIST ${LIBS_DIR}/*.dll)
 
