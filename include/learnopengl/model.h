@@ -1,6 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include <algorithm>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -10,7 +11,6 @@
 #include <learnopengl/utils.h>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 // 模型类
 class Model {
@@ -97,10 +97,17 @@ private:
 		std::vector<Texture> textures;
 		for (size_t i = 0; i < material->GetTextureCount(aiType); i++) {
 			aiString name;
+			std::string a("xxx");
+			std::string b("xxx");
+			auto c = a == b;
 			material->GetTexture(aiType, i, &name);
 			auto iter = find_if(texture_loaded.begin(), texture_loaded.end(), [=](Texture &texture) -> bool {
-				return strcmp(texture.name.c_str(), name.C_Str());
+				return texture.name == name.C_Str();
 			});
+			if (iter != texture_loaded.end()) {
+				
+			}
+
 			Texture texture;
 			texture.id = textureFromFile(name.C_Str(), dictionary);
 			texture.type = type;
