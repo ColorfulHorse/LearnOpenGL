@@ -16,6 +16,7 @@
 #include <learnopengl/light/helloLightTexture.h>
 #include <learnopengl/light/helloRealLight.h>
 #include <learnopengl/light/multipleLights.h>
+#include <learnopengl/model.h>
 
 using namespace std;
 

@@ -20,7 +20,7 @@ include_directories(${CMAKE_BINARY_DIR}/configuration)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBS_DIR})
 
-add_executable(LearnOpenGL ${SRC_LIST} ${INCLUDE_LIST})
+add_executable(LearnOpenGL  ${INCLUDE_LIST} ${SRC_LIST})
 
 file(GLOB_RECURSE LIB_LIST ${LIBS_DIR}/*.dll)
 
