@@ -1,9 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <cstdint>
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
@@ -32,6 +32,10 @@ public:
 	glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 right = glm::vec3(1.0f);
+
+	Camera(const Camera &camera) {
+
+	}
 
 	Camera(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) :
 		position(pos), worldUp(up), yaw(yaw), pitch(pitch) {

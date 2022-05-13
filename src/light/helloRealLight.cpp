@@ -1,12 +1,12 @@
-﻿#include <learnopengl/light/helloRealLight.h>
-#include <GLFW/glfw3.h>
+﻿#include "stb_image.h"
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <learnopengl/light/helloRealLight.h>
 #include <learnopengl/shader.h>
-#include "stb_image.h"
 #include <learnopengl/utils.h>
 
 using namespace std;
@@ -17,50 +17,49 @@ void HelloRealLight::init() {
 	glEnable(GL_DEPTH_TEST);
 	// 顶点坐标，法向量
 	float vertices[] = {
-        // positions          // normals           // texture coords
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+		// positions          // normals           // texture coords
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
-    };
-		
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+
 	lightShader = Shader(FileSystem::getPath("shaders/realLight/lightSource.vs").c_str(), FileSystem::getPath("shaders/realLight/lightSource.fs").c_str());
 	objectShader = Shader(FileSystem::getPath("shaders/realLight/object.vs").c_str(), FileSystem::getPath("shaders/realLight/object.fs").c_str());
 
@@ -90,52 +89,13 @@ void HelloRealLight::init() {
 	texture1 = loadTexture(FileSystem::getPath("assets/texture/container2.png").c_str());
 	texture2 = loadTexture(FileSystem::getPath("assets/texture/container2_specular.png").c_str());
 
-
 	objectShader.use();
-    objectShader.setInt("material.diffuse", 0);
-    objectShader.setInt("material.specular", 1);
+	objectShader.setInt("material.diffuse", 0);
+	objectShader.setInt("material.specular", 1);
 }
 
 void HelloRealLight::onCreate() {
 	init();
-}
-
-/*
- * 根据键盘输入平移视角
- */
-void HelloRealLight::onProcessInput() {
-	// W S A D 前后左右移动摄像机
-	float speed = deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.processKeyboard(FORWARD, deltaTime);
-	} else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.processKeyboard(BACKWARD, deltaTime);
-	} else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		// 叉乘 +X * +Y = +Z  +Y * +X = -Z
-		camera.processKeyboard(LEFT, deltaTime);
-	} else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.processKeyboard(RIGHT, deltaTime);
-	}
-}
-/*
- * 根据鼠标移动旋转视角
- */
-void HelloRealLight::onMouseMoved(double xposIn, double yposIn) {
-	float xPos = static_cast<float>(xposIn);
-	float yPos = static_cast<float>(yposIn);
-	if (firstMove) {
-		lastX = xPos;
-		lastY = yPos;
-		firstMove = false;
-	}
-
-	// 灵敏度
-	float sensitivity = 0.1f;
-	float offsetX = xPos - lastX;
-	float offsetY = lastY - yPos;
-	lastX = xPos;
-	lastY = yPos;
-	camera.processMouseMovement(offsetX, offsetY);
 }
 
 void HelloRealLight::onRender() {
@@ -148,23 +108,21 @@ void HelloRealLight::onRender() {
 	// 透视角度
 	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);
 
-
 	objectShader.use();
 	objectShader.setVec3("viewPos", camera.position);
 	// objectShader.setInt("material.diffuse", 0);
 	// objectShader.setInt("material.specular", 1);
 	objectShader.setFloat("material.shininess", 32.0f);
 
-
 	// 动态更新光的颜色
-	glm:: vec3 lightColor(1.0f);
+	glm::vec3 lightColor(1.0f);
 	lightColor.x = sin(currentTime * 0.3f);
 	lightColor.y = sin(currentTime * 1.2f);
 	lightColor.z = sin(currentTime * 0.6f);
 	// 环境光照通常会设置为一个比较低的强度，因为我们不希望环境光颜色太过显眼。
 	// 光源的漫反射分量通常设置为光所具有的颜色，通常是一个比较明亮的白色。
 	// 镜面光分量通常会保持为vec3(1.0)，以最大强度发光
-	objectShader.setVec3("light.ambient", glm::vec3(0.1f)); 
+	objectShader.setVec3("light.ambient", glm::vec3(0.1f));
 	objectShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 	objectShader.setVec3("light.position", camera.position);
@@ -185,7 +143,7 @@ void HelloRealLight::onRender() {
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
-	
+
 	glBindVertexArray(objectVAO);
 	for (size_t i = 0; i < 10; i++) {
 		glm::mat4 model = glm::mat4(1.0f);

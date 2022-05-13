@@ -1,11 +1,11 @@
-#include <learnopengl/basic/helloTriangle.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <learnopengl/basic/helloTriangle.h>
 
 using namespace std;
 
-/* 
+/*
   单个三角形
  */
 void HelloTriangle::initTriangle() {
@@ -102,7 +102,7 @@ void HelloTriangle::initTriangle() {
 	glBindVertexArray(0);
 }
 
-/* 
+/*
   多个三角形
  */
 void HelloTriangle::initMulti() {
@@ -173,9 +173,9 @@ void HelloTriangle::initMulti() {
 
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f, // 左下角
-		-0.5f, 0.5f, 0.0f, // 左上角
+		-0.5f, 0.5f, 0.0f,	// 左上角
 
-		0.5f, 0.5f, 0.0f, // 右上角
+		0.5f, 0.5f, 0.0f,  // 右上角
 		0.5f, -0.5f, 0.0f, // 右下角
 	};
 
@@ -186,9 +186,8 @@ void HelloTriangle::initMulti() {
 	}; */
 	// 两组连接三个点构成两个三角形
 	uint32_t indices[] = {
-		0, 1, 3, 
-		1, 2, 3
-	};
+		0, 1, 3,
+		1, 2, 3};
 
 	// 创建顶点数组对象，VAO用于管理多个VBO
 	glGenVertexArrays(1, &VAO);

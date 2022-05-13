@@ -1,11 +1,11 @@
-﻿#include <learnopengl/basic/helloCamera.h>
-#include <iostream>
+﻿#include "stb_image.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "stb_image.h"
+#include <iostream>
+#include <learnopengl/basic/helloCamera.h>
 #include <learnopengl/shader.h>
 
 using namespace std;
@@ -15,48 +15,47 @@ void HelloCamera::init() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glEnable(GL_DEPTH_TEST);
 	float vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
 	shader = Shader(FileSystem::getPath("shaders/helloCamera.vs").c_str(), FileSystem::getPath("shaders/helloCamera.fs").c_str());
 	shaderProgram = shader.id;
@@ -124,36 +123,35 @@ void HelloCamera::onCreate() {
 	init();
 }
 
-/* 
+/*
  * 根据键盘输入平移视角
  */
 void HelloCamera::onProcessInput() {
 	// W S A D 前后左右移动摄像机
 	float speed = deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {	
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		camera.processKeyboard(FORWARD, deltaTime);
-	}else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+	} else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 		camera.processKeyboard(BACKWARD, deltaTime);
-	}else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+	} else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		// 叉乘 +X * +Y = +Z  +Y * +X = -Z
 		camera.processKeyboard(LEFT, deltaTime);
-	}else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+	} else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		camera.processKeyboard(RIGHT, deltaTime);
 	}
-	
 }
-/* 
+/*
  * 根据鼠标移动旋转视角
  */
 void HelloCamera::onMouseMoved(double xposIn, double yposIn) {
 	float xPos = static_cast<float>(xposIn);
-    float yPos = static_cast<float>(yposIn);
+	float yPos = static_cast<float>(yposIn);
 	if (firstMove) {
 		lastX = xPos;
 		lastY = yPos;
 		firstMove = false;
 	}
-	
+
 	// 灵敏度
 	float sensitivity = 0.1f;
 	float offsetX = xPos - lastX;
@@ -169,7 +167,7 @@ void HelloCamera::onMouseMoved(double xposIn, double yposIn) {
 	// } else if (pitch < -89.0f) {
 	// 	pitch = -89.0f;
 	// }
-	
+
 	// // 根据向量的两次投影计算出摄像机朝向向量
 	// // 初始pitch yaw都为0时，x=1, y=0, z=0，摄像头实际上指向了x轴正半轴
 	// // 所以初始yaw需要是-90，x=0 y=0 z=-1， 指向z轴负半轴
@@ -180,7 +178,7 @@ void HelloCamera::onMouseMoved(double xposIn, double yposIn) {
 }
 
 void HelloCamera::onRender() {
-	float currentTime = (float) glfwGetTime();
+	float currentTime = (float)glfwGetTime();
 	deltaTime = currentTime - lastTime;
 	lastTime = currentTime;
 	glActiveTexture(GL_TEXTURE0);
@@ -215,7 +213,6 @@ void HelloCamera::onRender() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 }
-
 
 void HelloCamera::onDestroy() {
 	glDeleteVertexArrays(1, &VAO);

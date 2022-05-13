@@ -1,22 +1,24 @@
 ﻿// LearnOpenGL.cpp : Defines the entry point for the application.
 //
 
-#include <learnopengl/LearnOpenGL.h>
-#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <learnopengl/basic/helloTriangle.h>
+#include <iostream>
+#include <learnopengl/LearnOpenGL.h>
+#include <learnopengl/basic/helloCamera.h>
+#include <learnopengl/basic/helloCoordinate.h>
 #include <learnopengl/basic/helloShader.h>
 #include <learnopengl/basic/helloTexture.h>
 #include <learnopengl/basic/helloTransform.h>
-#include <learnopengl/basic/helloCoordinate.h>
-#include <learnopengl/basic/helloCamera.h>
+#include <learnopengl/basic/helloTriangle.h>
 #include <learnopengl/light/helloLight.h>
-#include <learnopengl/light/helloMaterial.h>
 #include <learnopengl/light/helloLightTexture.h>
+#include <learnopengl/light/helloMaterial.h>
 #include <learnopengl/light/helloRealLight.h>
 #include <learnopengl/light/multipleLights.h>
-#include <learnopengl/model.h>
+#include <type_traits>
+#include <learnopengl/utils.h>
+#include <learnopengl/modelLoad/modelLoad.h>
 
 using namespace std;
 
@@ -30,14 +32,19 @@ void processInput(GLFWwindow *window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
+
 	if (renderObj) {
-		renderObj->onProcessInput();
+		auto renderable = dynamic_cast<CameraRenderable *>(renderObj);
+		if (renderable) {
+			renderable->onProcessInput();
+		}
 	}
 }
 
 void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
-	if (renderObj) {
-		renderObj->onMouseMoved(xPos, yPos);
+	auto renderable = dynamic_cast<CameraRenderable *>(renderObj);
+	if (renderable) {
+		renderable->onMouseMoved(xPos, yPos);
 	}
 }
 
@@ -67,12 +74,13 @@ int main() {
 	// renderObj = new HelloMaterial(window);
 	// renderObj = new HelloLightTexture(window);
 	// renderObj = new HelloRealLight(window);
-	renderObj = new MultipleLights(window);
+	// renderObj = new MultipleLights(window);
+	renderObj = new ModelLoad(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 		// 设置清屏颜色
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		// 清空缓冲颜色值
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

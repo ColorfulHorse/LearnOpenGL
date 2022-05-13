@@ -1,6 +1,6 @@
-﻿#include <learnopengl/basic/helloTexture.h>
-#include <glad/glad.h>
+﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <learnopengl/basic/helloTexture.h>
 #include "stb_image.h"
 #include <learnopengl/shader.h>
 

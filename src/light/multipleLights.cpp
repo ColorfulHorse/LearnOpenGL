@@ -1,6 +1,6 @@
 ﻿#include <learnopengl/light/multipleLights.h>
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -99,44 +99,6 @@ void MultipleLights::init() {
 
 void MultipleLights::onCreate() {
 	init();
-}
-
-/*
- * 根据键盘输入平移视角
- */
-void MultipleLights::onProcessInput() {
-	// W S A D 前后左右移动摄像机
-	float speed = deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.processKeyboard(FORWARD, deltaTime);
-	} else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.processKeyboard(BACKWARD, deltaTime);
-	} else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		// 叉乘 +X * +Y = +Z  +Y * +X = -Z
-		camera.processKeyboard(LEFT, deltaTime);
-	} else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.processKeyboard(RIGHT, deltaTime);
-	}
-}
-/*
- * 根据鼠标移动旋转视角
- */
-void MultipleLights::onMouseMoved(double xposIn, double yposIn) {
-	float xPos = static_cast<float>(xposIn);
-	float yPos = static_cast<float>(yposIn);
-	if (firstMove) {
-		lastX = xPos;
-		lastY = yPos;
-		firstMove = false;
-	}
-
-	// 灵敏度
-	float sensitivity = 0.1f;
-	float offsetX = xPos - lastX;
-	float offsetY = lastY - yPos;
-	lastX = xPos;
-	lastY = yPos;
-	camera.processMouseMovement(offsetX, offsetY);
 }
 
 void MultipleLights::onRender() {

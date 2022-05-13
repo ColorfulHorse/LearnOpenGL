@@ -1,22 +1,21 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
-#include <cstdint>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <cstdint>
 #include <iostream>
-#include <learnopengl/shader.h>
 #include <learnopengl/filesystem.h>
+#include <learnopengl/shader.h>
 class Renderable {
 public:
 	virtual void onCreate() = 0;
-	virtual void onProcessInput() {
-	}
-	virtual void onMouseMoved(double xPos, double yPos) {
-	}
 	virtual void onRender() = 0;
 	virtual void onDestroy() = 0;
-	Renderable(GLFWwindow *win): window(win){}
+
+	Renderable(GLFWwindow *win) :
+		window(win) {
+	}
 	virtual ~Renderable() {
 		window = nullptr;
 	}

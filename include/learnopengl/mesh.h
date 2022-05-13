@@ -1,9 +1,9 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <cstdint>
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <learnopengl/shader.h>
 #include <string>
@@ -42,12 +42,12 @@ private:
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), &indices[0], GL_STATIC_DRAW);
 
+		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, texCoords));
-		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, texCoords));
 
 		// 解绑
 		glBindVertexArray(0);
@@ -68,21 +68,21 @@ public:
 	void render(Shader shader) {
 		for (size_t i = 0; i < textures.size(); i++) {
 			Texture texture = textures[i];
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, texture.id);
+			glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
 			shader.use();
 			if (texture.type == DIFFUSE) {
-				shader.setFloat("material.texture_diffuse" + std::to_string(i), i);
+				shader.setInt("material.texture_diffuse" + std::to_string(i), static_cast<unsigned int>(i));
 			} else {
-				shader.setFloat("material.texture_specular" + std::to_string(i), i);
+				shader.setInt("material.texture_specular" + std::to_string(i), static_cast<unsigned int>(i));
 			}
+			glBindTexture(GL_TEXTURE_2D, texture.id);
 		}
-		glActiveTexture(GL_TEXTURE0);
 
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
 		// 解绑VAO
-		glBindVertexArray(VAO);
+		glBindVertexArray(0);
+		glActiveTexture(GL_TEXTURE0);
 	}
 };
 

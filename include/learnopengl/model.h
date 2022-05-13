@@ -17,7 +17,7 @@ class Model {
 private:
 	std::vector<Texture> texture_loaded;
 	std::vector<Mesh> meshes;
-	std::string dictionary;
+	std::string directory;
 	void loadModel(std::string path) {
 		Assimp::Importer importer;
 		// aiProcess_Triangulate 模型不是全为三角形组成就把图元全部转换为三角形
@@ -31,7 +31,8 @@ private:
 			std::cout << "loadModel error:" << importer.GetErrorString() << std::endl;
 			return;
 		}
-		dictionary = path.substr(0, path.find_last_of("/"));
+		directory = path.substr(0, path.find_last_of("/"));
+		processNode(scene->mRootNode, scene);
 	}
 
 	void processNode(aiNode *node, const aiScene *scene) {
@@ -71,8 +72,12 @@ private:
 			if (mesh->HasTextureCoords(0)) {
 				glm::vec2 texCoords;
 				texCoords.x = mesh->mTextureCoords[0][i].x;
-				texCoords.y = mesh->mTextureCoords[0][i].x;
+				texCoords.y = mesh->mTextureCoords[0][i].y;
+				vertex.texCoords = texCoords;
+			} else {
+				vertex.texCoords = glm::vec2(0.0f, 0.0f);
 			}
+			vertices.push_back(vertex);
 		}
 
 		for (size_t i = 0; i < mesh->mNumFaces; i++) {
@@ -90,29 +95,30 @@ private:
 			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
+		return Mesh(vertices, indices, textures);
 	}
 
 	// 纹理
 	std::vector<Texture> loadMaterialTextures(aiMaterial *material, aiTextureType aiType, TextureType type) {
 		std::vector<Texture> textures;
-		for (size_t i = 0; i < material->GetTextureCount(aiType); i++) {
+		unsigned int count = material->GetTextureCount(aiType);
+		for (size_t i = 0; i < count; i++) {
 			aiString name;
-			std::string a("xxx");
-			std::string b("xxx");
-			auto c = a == b;
-			material->GetTexture(aiType, i, &name);
-			auto iter = find_if(texture_loaded.begin(), texture_loaded.end(), [=](Texture &texture) -> bool {
+			material->GetTexture(aiType, static_cast<GLenum>(i), &name);
+			auto iter = find_if(texture_loaded.begin(), texture_loaded.end(), [name](Texture &texture) {
 				return texture.name == name.C_Str();
 			});
 			if (iter != texture_loaded.end()) {
-				
+				textures.push_back(*iter);
+				continue;
 			}
 
 			Texture texture;
-			texture.id = textureFromFile(name.C_Str(), dictionary);
+			texture.id = textureFromFile(name.C_Str(), directory);
 			texture.type = type;
 			texture.name = name.C_Str();
 			textures.push_back(texture);
+			texture_loaded.push_back(texture);
 		}
 		return textures;
 	}
@@ -122,7 +128,7 @@ public:
 		loadModel(path);
 	}
 
-	void render(Shader shader) {
+	void render(Shader &shader) {
 		for (auto iter = meshes.begin(); iter != meshes.end(); iter++) {
 			iter->render(shader);
 		}
