@@ -19,6 +19,8 @@
 #include <type_traits>
 #include <learnopengl/utils.h>
 #include <learnopengl/modelLoad/modelLoad.h>
+#include <learnopengl/advanced/stencilTest.h>
+#include <learnopengl/advanced/blending.h>
 
 using namespace std;
 
@@ -75,14 +77,16 @@ int main() {
 	// renderObj = new HelloLightTexture(window);
 	// renderObj = new HelloRealLight(window);
 	// renderObj = new MultipleLights(window);
-	renderObj = new ModelLoad(window);
+	// renderObj = new ModelLoad(window);
+	// renderObj = new StencilTest(window);
+	renderObj = new Blending(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 		// 设置清屏颜色
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		// 清空缓冲颜色值
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		renderObj->onRender();
 		// 双缓冲，交换缓冲
