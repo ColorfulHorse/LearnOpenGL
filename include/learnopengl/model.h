@@ -25,8 +25,14 @@ private:
 		// aiProcess_GenNormals：如果模型不包含法向量的话，就为每个顶点创建法线。
 		// aiProcess_SplitLargeMeshes：将比较大的网格分割成更小的子网格，如果你的渲染有最大顶点数限制，只能渲染较小的网格，那么它会非常有用。
 		// aiProcess_OptimizeMeshes：和上个选项相反，它会将多个小网格拼接为一个大的网格，减少绘制调用从而进行优化。
-		const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
+		unsigned int flag = aiProcess_Triangulate;
+		std::string::size_type pos = path.find_last_of(".");
+		std::string suffix = path.substr(pos + 1, path.length() - pos);
+		if (suffix == "obj") {
+			flag |= aiProcess_FlipUVs;
+		}
+		const aiScene *scene = importer.ReadFile(path, flag);
+	
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 			std::cout << "loadModel error:" << importer.GetErrorString() << std::endl;
 			return;
@@ -87,19 +93,18 @@ private:
 				indices.push_back(face.mIndices[j]);
 			}
 		}
-
 		if (mesh->mMaterialIndex >= 0) {
 			aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-			std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, DIFFUSE);
+			std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, DIFFUSE, scene);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR);
+			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR, scene);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 		return Mesh(vertices, indices, textures);
 	}
 
 	// 纹理
-	std::vector<Texture> loadMaterialTextures(aiMaterial *material, aiTextureType aiType, TextureType type) {
+	std::vector<Texture> loadMaterialTextures(aiMaterial *material, aiTextureType aiType, TextureType type, const aiScene *scene) {
 		std::vector<Texture> textures;
 		unsigned int count = material->GetTextureCount(aiType);
 		for (size_t i = 0; i < count; i++) {
@@ -112,15 +117,56 @@ private:
 				textures.push_back(*iter);
 				continue;
 			}
-
 			Texture texture;
-			texture.id = textureFromFile(name.C_Str(), directory);
+			const aiTexture *tex = scene->GetEmbeddedTexture(name.C_Str());
+			if (tex) {
+				texture.id = textureFromEmbedded(tex);
+			} else {
+				texture.id = textureFromFile(name.C_Str(), directory);
+			}
+
 			texture.type = type;
 			texture.name = name.C_Str();
 			textures.push_back(texture);
 			texture_loaded.push_back(texture);
 		}
 		return textures;
+	}
+
+	uint32_t textureFromEmbedded(const aiTexture *tex) {
+		uint32_t textureId;
+		glGenTextures(1, &textureId);
+		int32_t width, height, channels;
+		stbi_uc *data = nullptr;
+		if (tex->mHeight == 0) {
+			data = stbi_load_from_memory(reinterpret_cast<stbi_uc *>(tex->pcData), tex->mWidth, &width, &height, &channels, 4);
+		} else {
+			data = stbi_load_from_memory(reinterpret_cast<stbi_uc *>(tex->pcData), tex->mWidth, &width, &height, &channels, 4);
+		}
+
+		GLenum format;
+		if (channels == 1)
+			format = GL_RED;
+		else if (channels == 3)
+			format = GL_RGB;
+		else if (channels == 4)
+			format = GL_RGBA;
+
+		if (data) {
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			// 根据图片创建纹理
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			// 创建多级渐远纹理
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		} else {
+			std::cout << "Failed to load embedded texture" << tex->mFilename.C_Str() << std::endl;
+		}
+		stbi_image_free(data);
+		return textureId;
 	}
 
 public:

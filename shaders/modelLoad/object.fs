@@ -1,7 +1,7 @@
 #version 330 core
 struct Material {
-    sampler2D texture_diffuse1;
-    sampler2D texture_specular1;
+    sampler2D texture_diffuse0;
+    sampler2D texture_specular0;
     float shininess;
 };
 
@@ -69,7 +69,7 @@ vec3 calDirLight(DirLight light, vec3 norm, vec3 viewDirection) {
     // 光源散射到片段的方向
     vec3 lightDirection = normalize(light.direction);
     // 物体贴图
-    vec3 tex = vec3(texture(material.texture_diffuse1, texCoord));
+    vec3 tex = vec3(texture(material.texture_diffuse0, texCoord));
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0);
     // 光线基于法线的反射向量
@@ -81,7 +81,7 @@ vec3 calDirLight(DirLight light, vec3 norm, vec3 viewDirection) {
     // 环境光照
     vec3 ambient = light.ambient * tex;
     vec3 diffuse = light.diffuse * diff * tex;
-    vec3 specular = light.specular * spec * vec3(texture(material.texture_specular1, texCoord));
+    vec3 specular = light.specular * spec * vec3(texture(material.texture_specular0, texCoord));
     vec3 res = ambient + diffuse + specular;
     return res;
 }
@@ -91,7 +91,7 @@ vec3 calPointLight(PointLight light, vec3 norm, vec3 viewDirection) {
     // 光源散射到片段的方向
     vec3 lightDirection = normalize(worldPos - light.position);
     // 物体贴图
-    vec3 tex = vec3(texture(material.texture_diffuse1, texCoord));
+    vec3 tex = vec3(texture(material.texture_diffuse0, texCoord));
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0f);
     // 光线基于法线的反射向量
@@ -107,7 +107,7 @@ vec3 calPointLight(PointLight light, vec3 norm, vec3 viewDirection) {
     // 环境光照
     vec3 ambient = light.ambient * tex;
     vec3 diffuse = light.diffuse * diff * tex;
-    vec3 specular = light.specular * spec * texture(material.texture_specular1, texCoord).rgb;
+    vec3 specular = light.specular * spec * texture(material.texture_specular0, texCoord).rgb;
     vec3 res = ambient * attenuation + diffuse * attenuation + specular * attenuation;
     return res;
 }
@@ -122,7 +122,7 @@ vec3 calSpotLight(SpotLight light, vec3 norm, vec3 viewDirection) {
     // 平滑强度在内切光角和外切光角范围内才有意义，限制为0-1
     float intensity = clamp((fragAngle - light.outerCutOff) / (light.cutOff - light.outerCutOff), 0.0, 1.0);
     // 物体贴图
-    vec3 tex = vec3(texture(material.texture_diffuse1, texCoord));
+    vec3 tex = vec3(texture(material.texture_diffuse0, texCoord));
 
     // 环境光照
     vec3 ambient = light.ambient * tex;
@@ -137,7 +137,7 @@ vec3 calSpotLight(SpotLight light, vec3 norm, vec3 viewDirection) {
     float spec = max(dot(-viewDirection, reflectDirection), 0.0);
     // 反光度
     spec = pow(spec, material.shininess);
-    vec3 specular = light.specular * spec * texture(material.texture_specular1, texCoord).rgb;
+    vec3 specular = light.specular * spec * texture(material.texture_specular0, texCoord).rgb;
     float distance = length(light.position - worldPos);
     // 距离衰减
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
@@ -145,12 +145,12 @@ vec3 calSpotLight(SpotLight light, vec3 norm, vec3 viewDirection) {
     return res;
 }
 
-uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse0;
 
 void main() {
-    片段法线
+    // 片段法线
     vec3 norm = normalize(normal);
-    视线向量
+    // 视线向量
     vec3 viewDirection = normalize(worldPos - viewPos);
     
     vec3 res = calDirLight(dirLight, norm, viewDirection);
@@ -159,9 +159,9 @@ void main() {
         res += calPointLight(pointLights[i], norm, viewDirection);
     }
 
-    res += calSpotLight(spotLight, norm, viewDirection);
+    // res += calSpotLight(spotLight, norm, viewDirection);
 
     FragColor = vec4(res, 1.0);
 
-    // FragColor = texture(texture_diffuse1, texCoord);
+    // FragColor = texture(texture_diffuse0, texCoord);
 }
