@@ -21,6 +21,8 @@
 #include <learnopengl/modelLoad/modelLoad.h>
 #include <learnopengl/advanced/stencilTest.h>
 #include <learnopengl/advanced/blending.h>
+#include <learnopengl/advanced/cullFace.h>
+
 
 using namespace std;
 
@@ -79,7 +81,8 @@ int main() {
 	// renderObj = new MultipleLights(window);
 	// renderObj = new ModelLoad(window);
 	// renderObj = new StencilTest(window);
-	renderObj = new Blending(window);
+	// renderObj = new Blending(window);
+	renderObj = new CullFace(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);

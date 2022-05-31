@@ -8,6 +8,7 @@
 #include <learnopengl/advanced/blending.h>
 #include <learnopengl/shader.h>
 #include <learnopengl/utils.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -116,10 +117,14 @@ void Blending::init() {
 
 	floorTexture = loadTexture(FileSystem::getPath("assets/texture/metal.png").c_str());
 	containerTexture = loadTexture(FileSystem::getPath("assets/texture/marble.jpg").c_str());
-	grassTexture = loadTexture(FileSystem::getPath("assets/texture/grass.png").c_str());
+	grassTexture = loadTexture(FileSystem::getPath("assets/texture/window.png").c_str());
 
 	objectShader.use();
 	objectShader.setInt("tex", 0);
+
+	glEnable(GL_BLEND);
+	// 上面绿60%alpha, 下面红100%, 最终颜色=绿*0.6+红*0.4
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Blending::onCreate() {
@@ -131,6 +136,13 @@ void Blending::onRender() {
 
 	deltaTime = currentTime - lastTime;
 	lastTime = currentTime;
+
+	// 根据window距离观察者的距离由远到近排序
+	std::sort(windows.begin(), windows.end(), [this](glm::vec3 &first, glm::vec3 &second) {
+		float distance1 = glm::length(camera.position - first);
+		float distance2 = glm::length(camera.position - second);
+		return distance1 > distance2;
+	});
 
 	// 先绘制箱子本体，将对应点的模板值设为1，然后将箱子放大一点，只绘制模板值不为1的部分为边框
 
@@ -169,9 +181,9 @@ void Blending::onRender() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, grassTexture);
 
-	for (size_t i = 0; i < grasses.size(); i++) {
+	for (size_t i = 0; i < windows.size(); i++) {
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, grasses[i]);
+		model = glm::translate(model, windows[i]);
 		objectShader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}

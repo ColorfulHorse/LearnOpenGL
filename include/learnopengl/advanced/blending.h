@@ -14,11 +14,14 @@ public:
 		glm::vec3(-1.0f, 0.0f, -1.0f),
 		glm::vec3(2.0f, 0.0f, 0.0f)
 	};
-	std::vector<glm::vec3> grasses {
-		// 让草在箱子表面
+	std::vector<glm::vec3> windows {
+		// 在箱子表面
 		glm::vec3(-1.0f, 0.0f, -0.49f),
 		glm::vec3(2.0f, 0.0f, 0.51f),
-		glm::vec3(0.5f, 0.0f, 1.0f)
+		glm::vec3(0.7f, 0.0f, 1.6f),
+		glm::vec3(0.4f, 0.0f, 1.2f),
+		glm::vec3(0.1f, 0.0f, 0.8f),
+		glm::vec3(1.0f, 0.0f, 2.0f)
 	};
     void init();
 	virtual void onCreate();

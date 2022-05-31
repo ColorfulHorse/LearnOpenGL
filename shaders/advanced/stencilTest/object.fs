@@ -10,5 +10,8 @@ out vec4 FragColor;
 
 void main() {
     vec4 texColor = texture(tex, texCoords);
+    // if(texColor.a < 0.1) {
+    //     discard;
+    // }
     FragColor = texColor;
 }
