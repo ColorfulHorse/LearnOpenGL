@@ -103,11 +103,7 @@ void HelloLightTexture::onCreate() {
 
 
 void HelloLightTexture::onRender() {
-	float currentTime = static_cast<float>(glfwGetTime());
-	// lightPos.x = 1.0f + sin(currentTime) * 2.0f;
-	// lightPos.y = sin(currentTime / 2.0f) * 1.0f;
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
+    super::onRender();
 	glm::mat4 model(1.0f);
 	glm::mat4 projection(1.0f);
 	// 透视角度
@@ -120,7 +116,7 @@ void HelloLightTexture::onRender() {
 	// objectShader.setInt("material.specular", 1);
 	objectShader.setFloat("material.shininess", 32.0f);
 
-
+	float currentTime = static_cast<float>(glfwGetTime());
 	// 动态更新光的颜色
 	glm:: vec3 lightColor(1.0f);
 	lightColor.x = sin(currentTime * 0.3f);

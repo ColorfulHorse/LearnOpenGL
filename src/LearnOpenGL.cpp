@@ -22,11 +22,15 @@
 #include <learnopengl/advanced/stencilTest.h>
 #include <learnopengl/advanced/blending.h>
 #include <learnopengl/advanced/cullFace.h>
+#include <learnopengl/advanced/framebuffer.h>
 
 
 using namespace std;
 
 Renderable *renderObj = nullptr;
+
+float deltaTime = 0.0f;
+float lastTime = 0.0f;
 
 /*
  * 接收键盘输入
@@ -40,7 +44,7 @@ void processInput(GLFWwindow *window) {
 	if (renderObj) {
 		auto renderable = dynamic_cast<CameraRenderable *>(renderObj);
 		if (renderable) {
-			renderable->onProcessInput();
+			renderable->onProcessInput(deltaTime);
 		}
 	}
 }
@@ -82,15 +86,15 @@ int main() {
 	// renderObj = new ModelLoad(window);
 	// renderObj = new StencilTest(window);
 	// renderObj = new Blending(window);
-	renderObj = new CullFace(window);
+	// renderObj = new CullFace(window);
+	renderObj = new FrameBuffer(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
+		float currentTime = (float)glfwGetTime();
+		deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
 		processInput(window);
-		// 设置清屏颜色
-		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-		// 清空缓冲颜色值
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+		
 		renderObj->onRender();
 		// 双缓冲，交换缓冲
 		glfwSwapBuffers(window);

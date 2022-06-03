@@ -5,10 +5,13 @@
 #include "stb_image.h"
 #include <cstdint>
 #include <iostream>
+#include <vector>
 
 uint32_t loadTexture(const char *path);
 
 uint32_t textureFromFile(const char *filename, const std::string &directory);
+
+uint32_t loadCubeMap(std::vector<std::string> faces);
 
 template <typename T1, typename T2>
 struct is_same_type {

@@ -94,11 +94,8 @@ void HelloMaterial::onCreate() {
 }
 
 void HelloMaterial::onRender() {
-	float currentTime = (float)glfwGetTime();
-	// lightPos.x = 1.0f + sin(currentTime) * 2.0f;
-	// lightPos.y = sin(currentTime / 2.0f) * 1.0f;
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
+    super::onRender();
+
 	glm::mat4 model(1.0f);
 	glm::mat4 projection(1.0f);
 	// 透视角度
@@ -115,7 +112,7 @@ void HelloMaterial::onRender() {
 	// objectShader.setVec3("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
 	// objectShader.setVec3("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
 	// objectShader.setFloat("material.shininess", 32.0f);
-
+	float currentTime = static_cast<float>(glfwGetTime());
 	// 动态更新光的颜色
 	glm:: vec3 lightColor(1.0f);
 	lightColor.x = sin(currentTime * 0.3f);

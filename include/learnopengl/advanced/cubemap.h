@@ -6,7 +6,7 @@
 #include <vector>
 
 // 面剔除
-class FrameBuffer : public CameraRenderable {
+class CubeMap : public CameraRenderable {
 public:
 	Shader screenShader;
 	uint32_t fbo, rbo;
@@ -19,11 +19,19 @@ public:
 		glm::vec3(-1.0f, 0.0f, -1.0f),
 		glm::vec3(2.0f, 0.0f, 0.0f)
 	};
+	std::vector<std::string> faces = {
+		FileSystem::getPath("assets/texture/skybox/right.jpg"),
+        FileSystem::getPath("assets/texture/skybox/left.jpg"),
+        FileSystem::getPath("assets/texture/skybox/top.jpg"),
+        FileSystem::getPath("assets/texture/skybox/bottom.jpg"),
+        FileSystem::getPath("assets/texture/skybox/front.jpg"),
+        FileSystem::getPath("assets/texture/skybox/back.jpg")
+	};
     void init();
 	virtual void onCreate();
 	virtual void onRender();
 	virtual void onDestroy();
-	FrameBuffer(GLFWwindow *win): CameraRenderable(win){}
+	CubeMap(GLFWwindow *win): CameraRenderable(win){}
 
 private:
 	typedef CameraRenderable super;

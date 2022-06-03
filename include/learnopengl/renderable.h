@@ -10,7 +10,12 @@
 class Renderable {
 public:
 	virtual void onCreate() = 0;
-	virtual void onRender() = 0;
+	virtual void onRender() {
+		// 设置清屏颜色
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+		// 清空缓冲颜色值
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
 	virtual void onDestroy() = 0;
 
 	Renderable(GLFWwindow *win) :

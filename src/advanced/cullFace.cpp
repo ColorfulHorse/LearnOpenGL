@@ -93,11 +93,7 @@ void CullFace::onCreate() {
 }
 
 void CullFace::onRender() {
-	float currentTime = (float)glfwGetTime();
-
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
-
+    super::onRender();
 
 	glm::mat4 model(1.0f);
 	glm::mat4 projection(1.0f);

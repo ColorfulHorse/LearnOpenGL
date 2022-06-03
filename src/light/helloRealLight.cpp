@@ -99,11 +99,8 @@ void HelloRealLight::onCreate() {
 }
 
 void HelloRealLight::onRender() {
+    super::onRender();
 	float currentTime = static_cast<float>(glfwGetTime());
-	// lightPos.x = 1.0f + sin(currentTime) * 2.0f;
-	// lightPos.y = sin(currentTime / 2.0f) * 1.0f;
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
 	glm::mat4 projection(1.0f);
 	// 透视角度
 	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);

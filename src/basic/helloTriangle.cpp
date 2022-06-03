@@ -226,6 +226,7 @@ void HelloTriangle::onCreate() {
 }
 
 void HelloTriangle::onRender() {
+    super::onRender();
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
 

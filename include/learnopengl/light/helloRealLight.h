@@ -29,6 +29,9 @@ public:
 	HelloRealLight(GLFWwindow *win) :
 		CameraRenderable(win) {
 	}
+
+private:
+	typedef CameraRenderable super;
 };
 
 #endif

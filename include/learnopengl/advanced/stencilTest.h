@@ -15,6 +15,9 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 	StencilTest(GLFWwindow *win): CameraRenderable(win){}
+
+private:
+	typedef CameraRenderable super;
 };
 
 #endif

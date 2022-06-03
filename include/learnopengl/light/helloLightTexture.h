@@ -21,6 +21,9 @@ public:
 	HelloLightTexture(GLFWwindow *win) :
 		CameraRenderable(win) {
 	}
+
+private:
+	typedef CameraRenderable super;
 };
 
 #endif

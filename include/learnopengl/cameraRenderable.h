@@ -7,15 +7,16 @@
 class CameraRenderable : public Renderable {
 public:
 	virtual void onCreate() = 0;
-	virtual void onRender() = 0;
+	virtual void onRender() {
+		super::onRender();
+	}
 	virtual void onDestroy() = 0;
 
 	/*
 	 * 根据键盘输入平移视角
 	 */
-	void onProcessInput() {
+	void onProcessInput(float deltaTime) {
 		// W S A D 前后左右移动摄像机
-		float speed = deltaTime;
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			camera.processKeyboard(FORWARD, deltaTime);
 		} else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
@@ -58,10 +59,11 @@ public:
 
 protected:
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-	float deltaTime = 0.0f;
-	float lastTime = 0.0f;
 	// 鼠标默认点
 	float lastX = 400.0f, lastY = 300.0f;
 	bool firstMove = true;
+
+private:
+	typedef Renderable super;
 };
 #endif

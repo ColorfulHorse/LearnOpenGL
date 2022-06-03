@@ -205,6 +205,7 @@ void HelloShader::onCreate() {
 }
 
 void HelloShader::onRender() {
+    super::onRender();
 	glUseProgram(shaderProgram);
 
 	// 更新全局颜色

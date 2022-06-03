@@ -37,6 +37,9 @@ public:
 	MultipleLights(GLFWwindow *win) :
 		CameraRenderable(win) {
 	}
+
+private:
+	typedef CameraRenderable super;
 };
 
 #endif

@@ -13,6 +13,9 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 	CullFace(GLFWwindow *win): CameraRenderable(win){}
+
+private:
+	typedef CameraRenderable super;
 };
 
 #endif

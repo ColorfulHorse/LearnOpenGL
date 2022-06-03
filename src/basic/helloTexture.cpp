@@ -92,6 +92,7 @@ void HelloTexture::onCreate() {
 }
 
 void HelloTexture::onRender() {
+    super::onRender();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);

@@ -15,6 +15,10 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 	HelloMaterial(GLFWwindow *win): CameraRenderable(win){}
+
+private:
+	typedef CameraRenderable super;
 };
+
 
 #endif

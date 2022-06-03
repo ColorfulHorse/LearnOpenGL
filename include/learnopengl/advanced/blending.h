@@ -28,6 +28,9 @@ public:
 	virtual void onRender();
 	virtual void onDestroy();
 	Blending(GLFWwindow *win): CameraRenderable(win){}
+
+private:
+	typedef CameraRenderable super;
 };
 
 #endif

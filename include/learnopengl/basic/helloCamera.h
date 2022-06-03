@@ -36,6 +36,9 @@ public:
 	virtual void onProcessInput();
 	virtual void onMouseMoved(double xPos, double yPos);
 	HelloCamera(GLFWwindow *win): Renderable(win){}
+
+private:
+	typedef Renderable super;
 };
 
 #endif

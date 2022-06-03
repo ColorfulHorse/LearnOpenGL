@@ -13,5 +13,8 @@ public:
 	virtual void onCreate();
 	virtual void onRender();
 	virtual void onDestroy();
+
+private:
+	typedef Renderable super;
 };
 #endif

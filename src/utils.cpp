@@ -34,3 +34,38 @@ uint32_t textureFromFile(const char *filename, const std::string &directory) {
 	std::string path = directory + '/' + filename;
 	return loadTexture(path.c_str());
 }
+
+uint32_t loadCubeMap(std::vector<std::string> faces) {
+	uint32_t textureId;
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+	GLenum format;
+	int32_t width, height, channels;
+	for (size_t i = 0; i < faces.size(); i++) {
+		std::string path = faces[i];
+		stbi_uc *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		if (channels == 1)
+			format = GL_RED;
+		else if (channels == 3)
+			format = GL_RGB;
+		else if (channels == 4)
+			format = GL_RGBA;
+
+		if (data) {
+			// 根据图片创建纹理
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		} else {
+			std::cout << "Failed to load texture" << path << std::endl;
+		}
+		stbi_image_free(data);
+	}
+	// 环绕和过滤
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	return textureId;
+}

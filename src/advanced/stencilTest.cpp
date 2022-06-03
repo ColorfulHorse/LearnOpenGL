@@ -115,10 +115,7 @@ void StencilTest::onCreate() {
 }
 
 void StencilTest::onRender() {
-	float currentTime = (float)glfwGetTime();
-
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
+    super::onRender();
 
 	// 先绘制箱子本体，将对应点的模板值设为1，然后将箱子放大一点，只绘制模板值不为1的部分为边框
 

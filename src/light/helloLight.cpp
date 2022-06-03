@@ -96,11 +96,10 @@ void HelloLight::onCreate() {
 
 
 void HelloLight::onRender() {
-	float currentTime = (float) glfwGetTime();
+    super::onRender();
+	float currentTime = static_cast<float>(glfwGetTime());
 	lightPos.x = 1.0f + sin(currentTime) * 2.0f;
 	lightPos.y = sin(currentTime / 2.0f) * 1.0f;
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
 	glm::mat4 model(1.0f);
 	glm::mat4 projection(1.0f);
 	// 透视角度

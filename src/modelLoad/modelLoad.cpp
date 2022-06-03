@@ -30,9 +30,8 @@ void ModelLoad::onCreate() {
 
 
 void ModelLoad::onRender() {
-	float currentTime = static_cast<float>(glfwGetTime());
-	deltaTime = currentTime - lastTime;
-	lastTime = currentTime;
+    super::onRender();
+
 	glm::mat4 projection(1.0f);
 	// 透视角度
 	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);
