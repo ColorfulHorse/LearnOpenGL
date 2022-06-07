@@ -110,6 +110,7 @@ private:
 		for (size_t i = 0; i < count; i++) {
 			aiString name;
 			material->GetTexture(aiType, static_cast<GLenum>(i), &name);
+			// 复用
 			auto iter = find_if(texture_loaded.begin(), texture_loaded.end(), [name](Texture &texture) {
 				return texture.name == name.C_Str();
 			});

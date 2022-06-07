@@ -23,6 +23,7 @@
 #include <learnopengl/advanced/blending.h>
 #include <learnopengl/advanced/cullFace.h>
 #include <learnopengl/advanced/framebuffer.h>
+#include <learnopengl/advanced/cubemap.h>
 
 
 using namespace std;
@@ -87,7 +88,8 @@ int main() {
 	// renderObj = new StencilTest(window);
 	// renderObj = new Blending(window);
 	// renderObj = new CullFace(window);
-	renderObj = new FrameBuffer(window);
+	// renderObj = new FrameBuffer(window);
+	renderObj = new CubeMap(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();

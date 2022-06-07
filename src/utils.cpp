@@ -1,6 +1,6 @@
 #include <learnopengl/utils.h>
 
-uint32_t loadTexture(const char *path) {
+uint32_t loadTexture(const char *path, GLint repeatMode) {
 	uint32_t textureId;
 	glGenTextures(1, &textureId);
 	int32_t width, height, channels;
@@ -19,8 +19,13 @@ uint32_t loadTexture(const char *path) {
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		// 创建多级渐远纹理
 		glGenerateMipmap(GL_TEXTURE_2D);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		if (repeatMode != -1) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repeatMode);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, repeatMode);
+		} else {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	} else {
@@ -32,7 +37,7 @@ uint32_t loadTexture(const char *path) {
 
 uint32_t textureFromFile(const char *filename, const std::string &directory) {
 	std::string path = directory + '/' + filename;
-	return loadTexture(path.c_str());
+	return loadTexture(path.c_str(), GL_REPEAT);
 }
 
 uint32_t loadCubeMap(std::vector<std::string> faces) {

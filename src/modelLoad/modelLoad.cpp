@@ -18,8 +18,9 @@ void ModelLoad::init() {
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 
-	// model = make_unique<Model>(FileSystem::getPath("assets/objects/backup/backup.fbx"));
 	model = make_unique<Model>(FileSystem::getPath("assets/objects/elysia/elysia.fbx"));
+	// model = make_unique<Model>(FileSystem::getPath("assets/objects/nanosuit/nanosuit.obj"));
+	// model = make_unique<Model>(FileSystem::getPath("assets/objects/backpack/backpack.obj"));
 	lightShader = Shader(FileSystem::getPath("shaders/modelLoad/lightSource.vs").c_str(), FileSystem::getPath("shaders/modelLoad/lightSource.fs").c_str());
 	objectShader = Shader(FileSystem::getPath("shaders/modelLoad/object.vs").c_str(), FileSystem::getPath("shaders/modelLoad/object.fs").c_str());
 }
@@ -41,7 +42,7 @@ void ModelLoad::onRender() {
 	objectShader.setFloat("material.shininess", 32.0f);
 
 
-	objectShader.setVec3("dirLight.ambient", glm::vec3(0.05f)); 
+	objectShader.setVec3("dirLight.ambient", glm::vec3(0.1f)); 
 	objectShader.setVec3("dirLight.diffuse", glm::vec3(0.4f));
 	objectShader.setVec3("dirLight.specular", glm::vec3(0.5f));
 	objectShader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));

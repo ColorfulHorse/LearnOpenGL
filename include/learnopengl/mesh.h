@@ -66,14 +66,16 @@ public:
 	}
 
 	void render(Shader shader) {
+		int diffuseIdx = 0;
+		int specularIdx = 0;
 		for (size_t i = 0; i < textures.size(); i++) {
 			Texture texture = textures[i];
 			glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
 			shader.use();
 			if (texture.type == DIFFUSE) {
-				shader.setInt("material.texture_diffuse" + std::to_string(i), static_cast<unsigned int>(i));
+				shader.setInt("material.texture_diffuse" + std::to_string(diffuseIdx++), static_cast<unsigned int>(i));
 			} else {
-				shader.setInt("material.texture_specular" + std::to_string(i), static_cast<unsigned int>(i));
+				shader.setInt("material.texture_specular" + std::to_string(specularIdx++), static_cast<unsigned int>(i));
 			}
 			glBindTexture(GL_TEXTURE_2D, texture.id);
 		}
