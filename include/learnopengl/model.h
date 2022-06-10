@@ -99,6 +99,8 @@ private:
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR, scene);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			std::vector<Texture> reflectMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, REFLECT, scene);
+			textures.insert(textures.end(), reflectMaps.begin(), reflectMaps.end());
 		}
 		return Mesh(vertices, indices, textures);
 	}

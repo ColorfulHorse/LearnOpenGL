@@ -16,6 +16,6 @@ void main() {
     // 法线矩阵 = 模型矩阵左上角的逆矩阵的转置矩阵
     normal = mat3(transpose(inverse(model))) * mNormal;
     texCoord = mTexCoord;
-    gl_Position = projection * view * model * vec4(worldPos, 1.0);
+    gl_Position = projection * view * vec4(worldPos, 1.0);
 }
 

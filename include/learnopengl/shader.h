@@ -112,6 +112,13 @@ public:
         glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z); 
     }
 
+    void bindUniformBlock(const std::string &name, GLuint bindingIndex) {
+        // 获取uniform块索引
+        unsigned int index = glGetUniformBlockIndex(id, name.c_str());
+        std::cout << "uniform block index:" << index << std::endl;
+        glUniformBlockBinding(id, index, bindingIndex);
+    }
+
 private:
     // utility function for checking shader compilation/linking errors.
     // ------------------------------------------------------------------------

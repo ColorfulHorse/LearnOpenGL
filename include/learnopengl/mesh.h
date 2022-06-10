@@ -17,7 +17,8 @@ struct Vertex {
 
 enum TextureType {
 	DIFFUSE = 1,
-	SPECULAR
+	SPECULAR,
+	REFLECT
 };
 
 struct Texture {
@@ -68,14 +69,17 @@ public:
 	void render(Shader shader) {
 		int diffuseIdx = 0;
 		int specularIdx = 0;
+		int reflectIdx = 0;
 		for (size_t i = 0; i < textures.size(); i++) {
 			Texture texture = textures[i];
 			glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
 			shader.use();
 			if (texture.type == DIFFUSE) {
 				shader.setInt("material.texture_diffuse" + std::to_string(diffuseIdx++), static_cast<unsigned int>(i));
-			} else {
+			} else if (texture.type == SPECULAR) {
 				shader.setInt("material.texture_specular" + std::to_string(specularIdx++), static_cast<unsigned int>(i));
+			} else if (texture.type == REFLECT) {
+				shader.setInt("material.texture_reflect" + std::to_string(reflectIdx++), static_cast<unsigned int>(i));
 			}
 			glBindTexture(GL_TEXTURE_2D, texture.id);
 		}

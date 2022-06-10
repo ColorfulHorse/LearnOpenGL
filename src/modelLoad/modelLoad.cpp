@@ -13,16 +13,81 @@ using namespace std;
 
 void ModelLoad::init() {
 
+
+	float skyboxVertices[] = {
+        // positions          
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+    };
+
 	// 隐藏鼠标光标
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	stbi_set_flip_vertically_on_load(true);
+	// stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 
-	model = make_unique<Model>(FileSystem::getPath("assets/objects/elysia/elysia.fbx"));
-	// model = make_unique<Model>(FileSystem::getPath("assets/objects/nanosuit/nanosuit.obj"));
+	// model = make_unique<Model>(FileSystem::getPath("assets/objects/elysia/elysia.fbx"));
+	model = make_unique<Model>(FileSystem::getPath("assets/objects/nanosuit_reflection/nanosuit.obj"));
 	// model = make_unique<Model>(FileSystem::getPath("assets/objects/backpack/backpack.obj"));
+
+	skyboxShader = Shader(FileSystem::getPath("shaders/advanced/cubemap/skybox.vs").c_str(), FileSystem::getPath("shaders/advanced/cubemap/skybox.fs").c_str());
 	lightShader = Shader(FileSystem::getPath("shaders/modelLoad/lightSource.vs").c_str(), FileSystem::getPath("shaders/modelLoad/lightSource.fs").c_str());
 	objectShader = Shader(FileSystem::getPath("shaders/modelLoad/object.vs").c_str(), FileSystem::getPath("shaders/modelLoad/object.fs").c_str());
+
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glBindVertexArray(0);
+
+	skyboxTexture = loadCubeMap(faces);
+	objectShader.use();
+	objectShader.setInt("skyboxTexture", 3);
+
+	skyboxShader.use();
+	skyboxShader.setInt("tex", 0);
 }
 
 void ModelLoad::onCreate() {
@@ -33,8 +98,8 @@ void ModelLoad::onCreate() {
 void ModelLoad::onRender() {
     super::onRender();
 
+	glm::mat4 view = camera.getViewMat();
 	glm::mat4 projection(1.0f);
-	// 透视角度
 	projection = glm::perspective(glm::radians(camera.zoom), 800 * 1.0f / 600, 0.1f, 100.0f);
 
 	objectShader.use();
@@ -42,7 +107,7 @@ void ModelLoad::onRender() {
 	objectShader.setFloat("material.shininess", 32.0f);
 
 
-	objectShader.setVec3("dirLight.ambient", glm::vec3(0.1f)); 
+	objectShader.setVec3("dirLight.ambient", glm::vec3(0.4f)); 
 	objectShader.setVec3("dirLight.diffuse", glm::vec3(0.4f));
 	objectShader.setVec3("dirLight.specular", glm::vec3(0.5f));
 	objectShader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
@@ -70,12 +135,28 @@ void ModelLoad::onRender() {
 	}
 	glm::mat4 md = glm::mat4(1.0f);
 	md = glm::translate(md, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-	md = glm::scale(md, glm::vec3(1.0f, 1.0f, 1.0f));	//
+	md = glm::scale(md, glm::vec3(0.5f, 0.5f, 0.5f));	//
 	objectShader.setMat4("model", md);
-	objectShader.setMat4("view", camera.getViewMat());
+	objectShader.setMat4("view", view);
 	objectShader.setMat4("projection", projection);
 
-	model->render(objectShader);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
+
+	this->model->render(objectShader);
+
+	glDepthFunc(GL_LEQUAL);
+	glm::mat4 model(1.0f);
+	view = glm::mat4(glm::mat3(camera.getViewMat()));
+	skyboxShader.use();
+	skyboxShader.setMat4("model", model);
+	skyboxShader.setMat4("view", view);
+	skyboxShader.setMat4("projection", projection);
+	glBindVertexArray(skyboxVAO);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDepthFunc(GL_LESS);
 
 	// glBindVertexArray(lightVAO);
 	// for (size_t i = 0; i < 10; i++) {

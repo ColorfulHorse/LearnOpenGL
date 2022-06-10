@@ -24,6 +24,8 @@
 #include <learnopengl/advanced/cullFace.h>
 #include <learnopengl/advanced/framebuffer.h>
 #include <learnopengl/advanced/cubemap.h>
+#include <learnopengl/advanced/ubo.h>
+
 
 
 using namespace std;
@@ -57,6 +59,7 @@ void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
 	}
 }
 
+
 int main() {
 	glfwInit();
 	// 主次版本
@@ -89,7 +92,8 @@ int main() {
 	// renderObj = new Blending(window);
 	// renderObj = new CullFace(window);
 	// renderObj = new FrameBuffer(window);
-	renderObj = new CubeMap(window);
+	// renderObj = new CubeMap(window);
+	renderObj = new UBO(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();

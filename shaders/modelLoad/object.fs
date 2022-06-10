@@ -2,6 +2,7 @@
 struct Material {
     sampler2D texture_diffuse0;
     sampler2D texture_specular0;
+    sampler2D texture_reflect0;
     float shininess;
 };
 
@@ -55,6 +56,8 @@ uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
 
+uniform samplerCube skyboxTexture;
+
 // 片段的世界坐标
 in vec3 worldPos;
 // 观察者坐标
@@ -70,6 +73,13 @@ vec3 calDirLight(DirLight light, vec3 norm, vec3 viewDirection) {
     vec3 lightDirection = normalize(light.direction);
     // 物体贴图
     vec3 tex = vec3(texture(material.texture_diffuse0, texCoord));
+
+    vec3 R = reflect(viewDirection, norm);
+    // 反射贴图
+    vec3 reflectTexture = vec3(texture(material.texture_reflect0, texCoord));
+    vec3 reflection = texture(skyboxTexture, R).rgb * reflectTexture;
+    tex += reflection;
+
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0);
     // 光线基于法线的反射向量
@@ -78,6 +88,7 @@ vec3 calDirLight(DirLight light, vec3 norm, vec3 viewDirection) {
     float spec = max(dot(-viewDirection, reflectDirection), 0.0);
     // 反光度
     spec = pow(spec, material.shininess);
+    
     // 环境光照
     vec3 ambient = light.ambient * tex;
     vec3 diffuse = light.diffuse * diff * tex;
@@ -92,6 +103,13 @@ vec3 calPointLight(PointLight light, vec3 norm, vec3 viewDirection) {
     vec3 lightDirection = normalize(worldPos - light.position);
     // 物体贴图
     vec3 tex = vec3(texture(material.texture_diffuse0, texCoord));
+
+    vec3 R = reflect(viewDirection, norm);
+    // 反射贴图
+    vec3 reflectTexture = vec3(texture(material.texture_reflect0, texCoord));
+    vec3 reflection = texture(skyboxTexture, R).rgb * reflectTexture;
+    tex += reflection;
+
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0f);
     // 光线基于法线的反射向量
@@ -101,8 +119,10 @@ vec3 calPointLight(PointLight light, vec3 norm, vec3 viewDirection) {
     // 反光度
     spec = pow(spec, material.shininess);
     float distance = length(light.position - worldPos);
+    
     // 距离衰减
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
+
     
     // 环境光照
     vec3 ambient = light.ambient * tex;
@@ -124,6 +144,12 @@ vec3 calSpotLight(SpotLight light, vec3 norm, vec3 viewDirection) {
     // 物体贴图
     vec3 tex = vec3(texture(material.texture_diffuse0, texCoord));
 
+    vec3 R = reflect(viewDirection, norm);
+    // 反射贴图
+    vec3 reflectTexture = vec3(texture(material.texture_reflect0, texCoord));
+    vec3 reflection = texture(skyboxTexture, R).rgb * reflectTexture;
+    tex += reflection;
+
     // 环境光照
     vec3 ambient = light.ambient * tex;
 
@@ -138,6 +164,8 @@ vec3 calSpotLight(SpotLight light, vec3 norm, vec3 viewDirection) {
     // 反光度
     spec = pow(spec, material.shininess);
     vec3 specular = light.specular * spec * texture(material.texture_specular0, texCoord).rgb;
+
+
     float distance = length(light.position - worldPos);
     // 距离衰减
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
@@ -150,7 +178,7 @@ uniform sampler2D texture_diffuse0;
 void main() {
     // 片段法线
     vec3 norm = normalize(normal);
-    // 视线向量
+    // // 视线向量
     vec3 viewDirection = normalize(worldPos - viewPos);
     
     vec3 res = calDirLight(dirLight, norm, viewDirection);
@@ -163,5 +191,13 @@ void main() {
 
     FragColor = vec4(res, 1.0);
 
-    // FragColor = texture(texture_diffuse0, texCoord);
+
+    // vec3 R = reflect(viewDirection, norm);
+    // // 反射贴图
+    // vec3 reflectTexture = vec3(texture(material.texture_reflect0, texCoord));
+    // vec3 reflection = texture(skyboxTexture, R).rgb * reflectTexture;
+
+    // vec3 diffuse = texture(material.texture_diffuse0, texCoord).rgb;
+
+    // FragColor = vec4(diffuse, 1.0);
 }
