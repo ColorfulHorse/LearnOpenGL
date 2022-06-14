@@ -1,17 +1,14 @@
-#ifndef MODELLOAD_H
-#define MODELLOAD_H
-
+#ifndef GEOMETRY_H
+#define GEOMETRY_H
+#include <learnopengl/cameraRenderable.h>
 #include <cstdint>
 #include <glm/glm.hpp>
-#include <learnopengl/cameraRenderable.h>
+#include <vector>
 #include <learnopengl/model.h>
-// #include <learnopengl/model1.h>
 
-class ModelLoad : public CameraRenderable {
+class Geometry : public CameraRenderable {
 public:
-	Shader objectShader;
-	Shader lightShader;
-	Shader skyboxShader;
+	Shader skyboxShader, lightShader, objectShader;
 	uint32_t skyboxTexture;
 	uint32_t skyboxVBO, skyboxVAO;
 	std::unique_ptr<Model> model = nullptr;
@@ -29,13 +26,11 @@ public:
 		glm::vec3(2.3f, -3.3f, -4.0f),
 		glm::vec3(-4.0f, 2.0f, -12.0f),
 		glm::vec3(0.0f, 0.0f, -3.0f)};
-	void init();
+    void init();
 	virtual void onCreate();
 	virtual void onRender();
 	virtual void onDestroy();
-	ModelLoad(GLFWwindow *win) :
-		CameraRenderable(win) {
-	}
+	Geometry(GLFWwindow *win): CameraRenderable(win){}
 
 private:
 	typedef CameraRenderable super;

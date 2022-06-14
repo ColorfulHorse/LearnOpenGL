@@ -25,7 +25,8 @@
 #include <learnopengl/advanced/framebuffer.h>
 #include <learnopengl/advanced/cubemap.h>
 #include <learnopengl/advanced/ubo.h>
-
+#include <learnopengl/advanced/geometry.h>
+#include <learnopengl/advanced/normalVisualization.h>
 
 
 using namespace std;
@@ -93,7 +94,9 @@ int main() {
 	// renderObj = new CullFace(window);
 	// renderObj = new FrameBuffer(window);
 	// renderObj = new CubeMap(window);
-	renderObj = new UBO(window);
+	// renderObj = new UBO(window);
+	// renderObj = new Geometry(window);
+	renderObj = new NormalVisualization(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();
