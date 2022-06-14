@@ -67,9 +67,15 @@ void NormalVisualization::init() {
 	skyboxShader = Shader(FileSystem::getPath("shaders/advanced/cubemap/skybox.vs").c_str(), FileSystem::getPath("shaders/advanced/cubemap/skybox.fs").c_str());
 	lightShader = Shader(FileSystem::getPath("shaders/modelLoad/lightSource.vs").c_str(), FileSystem::getPath("shaders/modelLoad/lightSource.fs").c_str());
 
+	// objectShader = Shader(
+	// 	FileSystem::getPath("shaders/modelLoad/object.vs").c_str(), 
+	// 	FileSystem::getPath("shaders/modelLoad/object.fs").c_str()
+	// );
+
 	objectShader = Shader(
-		FileSystem::getPath("shaders/modelLoad/object.vs").c_str(), 
-		FileSystem::getPath("shaders/modelLoad/object.fs").c_str()
+		FileSystem::getPath("shaders/advanced/normalVisualization/object.vs").c_str(), 
+		FileSystem::getPath("shaders/advanced/normalVisualization/object.fs").c_str(),
+		FileSystem::getPath("shaders/advanced/normalVisualization/object.gs").c_str()
 	);
 
 	normalShader = Shader(

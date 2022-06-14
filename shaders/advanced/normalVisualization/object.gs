@@ -25,12 +25,10 @@ vec3 getNormal() {
 
 
 void main() {
+    // 这里三个顶点都用面的法线
     vec3 mNormal = getNormal();
-    float magnitude = 2.0;
-    // 随时间0-1变化
-    vec3 direction = mNormal * ((sin(time) + 1.0) / 2.0) * magnitude;
     for(int i = 0; i < 3; i++) {
-        gl_Position = gl_in[i].gl_Position + vec4(direction * magnitude, 1.0);
+        gl_Position = gl_in[i].gl_Position;
         texCoord = gs_in[i].textCoord;
         worldPos = gs_in[i].worldPos;
         normal = mNormal;

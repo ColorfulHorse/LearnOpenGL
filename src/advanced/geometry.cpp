@@ -69,7 +69,7 @@ void Geometry::init() {
 
 	objectShader = Shader(
 		FileSystem::getPath("shaders/advanced/geometry/object.vs").c_str(), 
-		FileSystem::getPath("shaders/modelLoad/object.fs").c_str(),
+		FileSystem::getPath("shaders/advanced/geometry/object.fs").c_str(),
 		FileSystem::getPath("shaders/advanced/geometry/object.gs").c_str()
 	);
 
