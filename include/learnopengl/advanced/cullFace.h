@@ -8,6 +8,7 @@
 class CullFace : public CameraRenderable {
 public:
 	uint32_t texture;
+	Shader normalShader;
     void init();
 	virtual void onCreate();
 	virtual void onRender();

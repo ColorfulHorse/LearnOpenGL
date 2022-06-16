@@ -57,7 +57,7 @@ void NormalVisualization::init() {
         -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f,  1.0f
     };
-
+	
 	// 隐藏鼠标光标
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glEnable(GL_DEPTH_TEST);

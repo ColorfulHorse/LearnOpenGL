@@ -89,6 +89,7 @@ void Geometry::init() {
 
 	skyboxShader.use();
 	skyboxShader.setInt("tex", 0);
+	glfwSetTime(0.0);
 }
 
 void Geometry::onCreate() {
@@ -138,6 +139,11 @@ void Geometry::onRender() {
 	objectShader.setMat4("model", md);
 	objectShader.setMat4("view", view);
 	objectShader.setMat4("projection", projection);
+
+	float time = static_cast<float>(glfwGetTime());
+	 
+	cout << "time:" << time << endl;
+	cout << "factor:" << (sin(time) + 1.0) / 2.0 << endl;
 	objectShader.setFloat("time", static_cast<float>(glfwGetTime()));
 
 	glActiveTexture(GL_TEXTURE3);

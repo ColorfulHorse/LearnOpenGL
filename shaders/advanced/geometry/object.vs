@@ -17,6 +17,6 @@ void main() {
     vs_out.worldPos = vec3(model * vec4(mPosition, 1.0));
     vs_out.textCoord = mTextCoord;
     vs_out.normal = mat3(transpose(inverse(model))) * mNormal;
-    gl_Position = projection * view * vec4(vs_out.worldPos, 1.0);
+    gl_Position = view * vec4(vs_out.worldPos, 1.0);
 }
 
