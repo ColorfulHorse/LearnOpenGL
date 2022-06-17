@@ -22,20 +22,21 @@ uniform float time;
 vec3 getNormal() {
     vec3 a = vec3(gl_in[0].gl_Position - gl_in[1].gl_Position);
     vec3 b = vec3(gl_in[2].gl_Position - gl_in[1].gl_Position);
-    return normalize(cross(b, a));
+    return normalize(cross(a, b));
 }
 
 
 void main() {
-    vec3 faceNormal = getNormal();
-    float magnitude = 2.0;
-    // 随时间0-1变化
-    vec3 direction = faceNormal * ((sin(time) + 1.0) / 2.0) * magnitude;
+    // 面的法线
+    vec3 mNormal = getNormal();
     for(int i = 0; i < 3; i++) {
-        gl_Position = projection * (gl_in[i].gl_Position + vec4(direction * magnitude, 1.0));
+        gl_Position = gl_in[i].gl_Position;
         texCoord = gs_in[i].textCoord;
         worldPos = gs_in[i].worldPos;
-        normal = faceNormal;
+        // 使用顶点的法线
+        // normal = gs_in[i].normal;
+        // 使用面的法线
+        normal = mNormal;
         EmitVertex();
     }
     EndPrimitive();
