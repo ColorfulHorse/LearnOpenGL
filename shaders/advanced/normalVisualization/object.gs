@@ -20,18 +20,19 @@ uniform float time;
 vec3 getNormal() {
     vec3 a = vec3(gl_in[0].gl_Position - gl_in[1].gl_Position);
     vec3 b = vec3(gl_in[2].gl_Position - gl_in[1].gl_Position);
-    return normalize(cross(a, b));
+    return normalize(cross(b, a));
 }
 
 
 void main() {
-    // 这里三个顶点都用面的法线
     vec3 mNormal = getNormal();
     for(int i = 0; i < 3; i++) {
         gl_Position = gl_in[i].gl_Position;
         texCoord = gs_in[i].textCoord;
         worldPos = gs_in[i].worldPos;
+        // 每个顶点都使用面的法向量
         normal = mNormal;
+        // normal = gs_in[i].normal;
         EmitVertex();
     }
     EndPrimitive();

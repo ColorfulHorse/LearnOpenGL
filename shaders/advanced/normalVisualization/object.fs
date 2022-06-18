@@ -190,14 +190,4 @@ void main() {
     // res += calSpotLight(spotLight, norm, viewDirection);
 
     FragColor = vec4(res, 1.0);
-
-
-    // vec3 R = reflect(viewDirection, norm);
-    // // 反射贴图
-    // vec3 reflectTexture = vec3(texture(material.texture_reflect0, texCoord));
-    // vec3 reflection = texture(skyboxTexture, R).rgb * reflectTexture;
-
-    // vec3 diffuse = texture(material.texture_diffuse0, texCoord).rgb;
-
-    // FragColor = vec4(diffuse, 1.0);
 }
