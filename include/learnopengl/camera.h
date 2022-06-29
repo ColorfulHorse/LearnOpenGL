@@ -80,6 +80,10 @@ public:
         return glm::lookAt(position, front + position, up);
     }
 
+	void move(glm::vec3 vec) {
+		position += vec;
+	}
+
 
 private:
 	void updateCameraVector() {

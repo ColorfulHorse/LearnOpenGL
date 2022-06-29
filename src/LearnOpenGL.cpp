@@ -28,6 +28,8 @@
 #include <learnopengl/advanced/geometry.h>
 #include <learnopengl/advanced/normalVisualization.h>
 #include <learnopengl/advanced/instanceQuad.h>
+#include <learnopengl/advanced/galaxy.h>
+#include <learnopengl/advanced/antiAliasing.h>
 
 using namespace std;
 
@@ -97,7 +99,9 @@ int main() {
 	// renderObj = new UBO(window);
 	// renderObj = new Geometry(window);
 	// renderObj = new NormalVisualization(window);
-	renderObj = new InstanceQuad(window);
+	// renderObj = new InstanceQuad(window);
+	// renderObj = new Galaxy(window);
+	renderObj = new AntiAliasing(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();

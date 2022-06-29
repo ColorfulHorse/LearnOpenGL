@@ -5,11 +5,14 @@
 #include <learnopengl/cameraRenderable.h>
 #include <learnopengl/model.h>
 #include <vector>
+#include <learnopengl/model.h>
 
 class Galaxy : public CameraRenderable {
 public:
-	Shader objectShader;
-	glm::vec2 translations[100];
+	std::unique_ptr<Model> rock = nullptr;
+	std::unique_ptr<Model> planet = nullptr;
+	Shader rockShader;
+	Shader planetShader;
 	void init();
 	virtual void onCreate();
 	virtual void onRender();
@@ -21,9 +24,9 @@ public:
 private:
 	typedef CameraRenderable super;
 	uint32_t instanceVBO;
-	int amount = 2000;
-	float radius = 50.0f;
-	float offset = 2.5f;
+	int amount = 20000;
+	float radius = 60.0f;
+	float offset = 10.0f;
 	glm::mat4 *matrices = nullptr;
 };
 

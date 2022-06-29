@@ -15,8 +15,6 @@
 // 模型类
 class Model {
 private:
-	std::vector<Texture> texture_loaded;
-	std::vector<Mesh> meshes;
 	std::string directory;
 	void loadModel(std::string path) {
 		Assimp::Importer importer;
@@ -99,6 +97,8 @@ private:
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR, scene);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, NORMAL, scene);
+			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 			std::vector<Texture> reflectMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, REFLECT, scene);
 			textures.insert(textures.end(), reflectMaps.begin(), reflectMaps.end());
 		}
@@ -173,6 +173,8 @@ private:
 	}
 
 public:
+	std::vector<Mesh> meshes;
+	std::vector<Texture> texture_loaded;
 	Model(std::string path) {
 		loadModel(path);
 	}

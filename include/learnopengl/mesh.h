@@ -18,7 +18,8 @@ struct Vertex {
 enum TextureType {
 	DIFFUSE = 1,
 	SPECULAR,
-	REFLECT
+	REFLECT,
+	NORMAL
 };
 
 struct Texture {
@@ -69,6 +70,7 @@ public:
 	void render(Shader shader) {
 		int diffuseIdx = 0;
 		int specularIdx = 0;
+		int normalIdx = 0;
 		int reflectIdx = 0;
 		for (size_t i = 0; i < textures.size(); i++) {
 			Texture texture = textures[i];
@@ -78,7 +80,9 @@ public:
 				shader.setInt("material.texture_diffuse" + std::to_string(diffuseIdx++), static_cast<unsigned int>(i));
 			} else if (texture.type == SPECULAR) {
 				shader.setInt("material.texture_specular" + std::to_string(specularIdx++), static_cast<unsigned int>(i));
-			} else if (texture.type == REFLECT) {
+			} else if (texture.type == NORMAL) {
+				shader.setInt("material.texture_normal" + std::to_string(normalIdx++), static_cast<unsigned int>(i));
+			}else if (texture.type == REFLECT) {
 				shader.setInt("material.texture_reflect" + std::to_string(reflectIdx++), static_cast<unsigned int>(i));
 			}
 			glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -89,6 +93,10 @@ public:
 		// 解绑VAO
 		glBindVertexArray(0);
 		glActiveTexture(GL_TEXTURE0);
+	}
+
+	uint32_t getVAO() {
+		return VAO;
 	}
 };
 
