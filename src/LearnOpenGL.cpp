@@ -30,6 +30,7 @@
 #include <learnopengl/advanced/instanceQuad.h>
 #include <learnopengl/advanced/galaxy.h>
 #include <learnopengl/advanced/antiAliasing.h>
+#include <learnopengl/advancedLighting/blinnPhong.h>
 
 using namespace std;
 
@@ -101,7 +102,8 @@ int main() {
 	// renderObj = new NormalVisualization(window);
 	// renderObj = new InstanceQuad(window);
 	// renderObj = new Galaxy(window);
-	renderObj = new AntiAliasing(window);
+	// renderObj = new AntiAliasing(window);
+	renderObj = new BlinnPhong(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();

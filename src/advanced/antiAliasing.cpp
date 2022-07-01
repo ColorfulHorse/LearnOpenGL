@@ -12,6 +12,7 @@
 using namespace std;
 
 void AntiAliasing::init() {
+	glEnable(GL_DEPTH_TEST);
 	// 隐藏鼠标光标
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	float cubeVertices[] = {
@@ -94,15 +95,15 @@ void AntiAliasing::init() {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) (2 * sizeof(float)));
 	glBindVertexArray(0);
 
+
 	glGenFramebuffers(1, &fbo);
 	// GL_READ_FRAMEBUFFER 读  GL_DRAW_FRAMEBUFFER 写
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
 	// 多重采样纹理
 	glGenTextures(1, &textureMsaa);
-	glBindTexture(GL_TEXTURE_2D, textureMsaa);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, textureMsaa);
 	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, 800, 600, GL_TRUE);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, textureMsaa, 0);
 
 	// 深度和模板
@@ -163,14 +164,14 @@ void AntiAliasing::onRender() {
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// 把离屏渲染FBO的颜色复制到中间FBO
-	glBindBuffer(GL_READ_FRAMEBUFFER, fbo);
-	glBindBuffer(GL_DRAW_FRAMEBUFFER, intermediateFbo);
-	glBlitFramebuffer(0, 0, 800, 600, 0, 0, 800, 600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, 800, 600, 0, 0, 800, 600, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
 	// 把离屏渲染的纹理绘制到屏幕
-	glBindBuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
 
 	screenShader.use();

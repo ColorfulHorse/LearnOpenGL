@@ -15,7 +15,7 @@ public:
 	/*
 	 * 根据键盘输入平移视角
 	 */
-	void onProcessInput(float deltaTime) {
+	virtual void onProcessInput(float deltaTime) {
 		// W S A D 前后左右移动摄像机
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			camera.processKeyboard(FORWARD, deltaTime);
