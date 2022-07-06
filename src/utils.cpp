@@ -1,6 +1,6 @@
 #include <learnopengl/utils.h>
 
-uint32_t loadTexture(const char *path, GLint repeatMode) {
+uint32_t loadTexture(const char *path, GLint repeatMode, bool gamma) {
 	uint32_t textureId;
 	glGenTextures(1, &textureId);
 	int32_t width, height, channels;

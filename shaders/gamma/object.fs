@@ -22,20 +22,9 @@ in VS_OUT {
 
 out vec4 FragColor;
 
-void main() {
-    // 片段法线
-    vec3 norm = normalize(fs_in.mNormal);
-    // 视线向量
-    vec3 viewDirection = normalize(fs_in.mFragPos - viewPos);
-
-    // 光源散射到片段的方向
-    vec3 lightDirection = normalize(fs_in.mFragPos - lightPos);
-    // 物体贴图
-    vec3 tex = vec3(texture(material.texture_diffuse, fs_in.mTexCoords));
-
+vec3 calcLight(vec3 norm, vec3 viewDirection, vec3 lightDirection, vec3 tex) {
     // 点乘计算光源对这个面的影响，因为法向量垂直平面朝上，所以这里取光照的反方向
     float diff = max(dot(norm, -lightDirection), 0.0);
-
     float spec = 0.0;
 
     if(blinn) {
@@ -56,5 +45,21 @@ void main() {
     vec3 diffuse = diff * tex;
     vec3 specular = spec * vec3(0.05);
     vec3 res = ambient + diffuse + specular;
+    return res; 
+}
+
+void main() {
+    // 片段法线
+    vec3 norm = normalize(fs_in.mNormal);
+    // 视线向量
+    vec3 viewDirection = normalize(fs_in.mFragPos - viewPos);
+    // 光源散射到片段的方向
+    vec3 lightDirection = normalize(fs_in.mFragPos - lightPos);
+    // 物体贴图
+    vec3 tex = vec3(texture(material.texture_diffuse, fs_in.mTexCoords));
+    vec3 res = calcLight(norm, viewDirection, lightDirection, tex);
+    if(gamma) {
+        res = pow(res, vec3(1.0/2.2));
+    }
     FragColor = vec4(res, 1.0);
 }
