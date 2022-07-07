@@ -95,7 +95,7 @@ void Gamma::init() {
 	
 	glBindVertexArray(0);
 	planetTexture = loadTexture(FileSystem::getPath("assets/texture/wood.png").c_str());
-	planetTextureGamma = loadTexture(FileSystem::getPath("assets/texture/wood.png").c_str(), -1, true);
+	// planetTextureGamma = loadTexture(FileSystem::getPath("assets/texture/wood.png").c_str(), -1, true);
 	shader.use();
 	shader.setInt("material.texture_diffuse", 0);
 	shader.setFloat("material.shininess", 32.0f);

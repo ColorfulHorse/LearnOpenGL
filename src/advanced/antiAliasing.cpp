@@ -165,7 +165,7 @@ void AntiAliasing::onRender() {
 
 	// 把离屏渲染FBO的颜色复制到中间FBO
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediateFbo);
 	glBlitFramebuffer(0, 0, 800, 600, 0, 0, 800, 600, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
 	// 把离屏渲染的纹理绘制到屏幕

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <vector>
 
-uint32_t loadTexture(const char *path, GLint repeatMode = -1);
+uint32_t loadTexture(const char *path, GLint repeatMode = -1, bool gamma = false);
 
 uint32_t textureFromFile(const char *filename, const std::string &directory);
 
