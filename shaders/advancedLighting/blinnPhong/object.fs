@@ -21,7 +21,6 @@ in VS_OUT {
 
 
 out vec4 FragColor;
-
 void main() {
     // 片段法线
     vec3 norm = normalize(fs_in.mNormal);

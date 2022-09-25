@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <learnopengl/LearnOpenGL.h>
+#include <learnopengl/basic/helloTriangle.h>
 #include <learnopengl/basic/helloCamera.h>
 #include <learnopengl/basic/helloCoordinate.h>
 #include <learnopengl/basic/helloShader.h>
@@ -31,6 +32,8 @@
 #include <learnopengl/advanced/galaxy.h>
 #include <learnopengl/advanced/antiAliasing.h>
 #include <learnopengl/advancedLighting/blinnPhong.h>
+#include <learnopengl/advancedLighting/gamma.h>
+#include <learnopengl/advancedLighting/blurGamma.h>
 
 using namespace std;
 
@@ -84,7 +87,8 @@ int main() {
 		glViewport(0, 0, width, height);
 	});
 	glfwSetCursorPosCallback(window, mouse_callback);
-
+	// glEnable(GL_FRAMEBUFFER_SRGB);
+	// renderObj = new HelloTriangle(window);
 	// renderObj = new HelloCamera(window);
 	// renderObj = new HelloLight(window);
 	// renderObj = new HelloMaterial(window);
@@ -103,7 +107,9 @@ int main() {
 	// renderObj = new InstanceQuad(window);
 	// renderObj = new Galaxy(window);
 	// renderObj = new AntiAliasing(window);
-	renderObj = new BlinnPhong(window);
+	// renderObj = new BlinnPhong(window);
+	// renderObj = new Gamma(window);
+	renderObj = new BlurGamma(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();

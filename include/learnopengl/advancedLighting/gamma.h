@@ -23,7 +23,7 @@ private:
 	uint32_t planetTexture, planetTextureGamma;
 	Shader lightShader;
 	glm::vec3 lightPos = glm::vec3(0.0f, 0.4f, 1.6f);
-	bool blinn = false;
+	bool gamma = false;
 	bool pressed = false;
 	glm::vec3 lightPositions[4] = {
         glm::vec3(-3.0f, 0.0f, 0.0f),
