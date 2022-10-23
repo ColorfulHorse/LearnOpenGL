@@ -34,6 +34,7 @@
 #include <learnopengl/advancedLighting/blinnPhong.h>
 #include <learnopengl/advancedLighting/gamma.h>
 #include <learnopengl/advancedLighting/blurGamma.h>
+#include <learnopengl/advancedLighting/shadowMapping.h>
 
 using namespace std;
 
@@ -109,7 +110,8 @@ int main() {
 	// renderObj = new AntiAliasing(window);
 	// renderObj = new BlinnPhong(window);
 	// renderObj = new Gamma(window);
-	renderObj = new BlurGamma(window);
+	// renderObj = new BlurGamma(window);
+	renderObj = new ShadowMapping(window);
 	renderObj->onCreate();
 	while (!glfwWindowShouldClose(window)) {
 		float currentTime = (float)glfwGetTime();

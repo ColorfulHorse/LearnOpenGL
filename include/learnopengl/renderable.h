@@ -30,5 +30,7 @@ protected:
 	uint32_t shaderProgram = 0;
 	Shader shader;
 	GLFWwindow *window = nullptr;
+	const int viewportWidth = 800;
+	const int viewportHeight = 600;
 };
 #endif
