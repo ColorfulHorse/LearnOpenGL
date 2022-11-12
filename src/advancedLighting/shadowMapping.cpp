@@ -14,15 +14,16 @@ using namespace std;
 void ShadowMapping::init() {
 	glEnable(GL_DEPTH_TEST);
 
+
 	float planeVertices[] = {
         // positions            // normals         // texcoords
          25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-        -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+		25.0f, -0.5f,  -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f,
+        -25.0f, -0.5f, 25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
 
-         25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+         25.0f, -0.5f,  -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f,
         -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-         25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
+         -25.0f, -0.5f, 25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
     };
 	glGenVertexArrays(1, &planeVAO);
 	glGenBuffers(1, &planeVBO);
@@ -52,8 +53,13 @@ void ShadowMapping::init() {
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// 超出阴影贴图范围都看作被照亮
+	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
@@ -81,12 +87,22 @@ void ShadowMapping::onRender() {
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	// 阴影失真
+    // 由于阴影贴图分辨率不足，多个邻近像素使用深度贴图中一个像素来作比较，导致邻近像素深度值有细微差别，造成明暗条纹
+    // 两种解决方案，一种是根据片段和光方向的角度将z值向近处偏移一些再判断；但是这样会导致悬浮失真(Peter Panning)
+    // 一种为建立阴影贴图时剔除正面；但是剔除正面时由于平面只有一面所以无效，深度值永远为1，所以平面永远没有阴影
+    // https://www.zhihu.com/question/49090321
+    // https://www.zhihu.com/question/321779117
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
 	glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 	glm::mat4 lightTransfer = lightProjection * lightView;
 
 	depthShader.use();
 	depthShader.setMat4("lightTransfer", lightTransfer);
 	renderScene(depthShader);
+	glCullFace(GL_BACK);
+	glDisable(GL_CULL_FACE);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, viewportWidth, viewportHeight);
@@ -142,6 +158,16 @@ void ShadowMapping::renderScene(Shader &shader) {
 	model = glm::scale(model, glm::vec3(0.25f));
 	shader.setMat4("model", model);
 	renderCube();
+
+
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(-3.0f, 1.0f, 3.0f));
+	model = glm::scale(model, glm::vec3(0.05f));
+	shader.setMat4("model", model);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, planeTexture);
+	glBindVertexArray(planeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 // renderCube() renders a 1x1 3D cube in NDC.

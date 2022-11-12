@@ -7,6 +7,7 @@ out VS_OUT {
     vec3 fragPos;
     vec3 mNormal;
     vec2 mTexCoords;
+    // 基于光的视角的坐标
     vec4 fragPosLightSpace;
 } vs_out;
 
