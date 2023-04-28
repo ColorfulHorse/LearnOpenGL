@@ -15,6 +15,10 @@ public:
 		CameraRenderable(win) {
 	}
 
+	virtual ~ShadowMapping() {
+
+	}
+
 private:
 	typedef CameraRenderable super;
 	Shader depthShader;

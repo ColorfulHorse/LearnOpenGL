@@ -91,6 +91,7 @@ int main() {
 		glViewport(0, 0, width, height);
 	});
 	glfwSetCursorPosCallback(window, mouse_callback);
+	
 	// glEnable(GL_FRAMEBUFFER_SRGB);
 	// renderObj = new HelloTriangle(window);
 	// renderObj = new HelloCamera(window);

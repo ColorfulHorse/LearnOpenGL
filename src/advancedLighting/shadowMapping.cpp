@@ -105,7 +105,9 @@ void ShadowMapping::onRender() {
 	glDisable(GL_CULL_FACE);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, viewportWidth, viewportHeight);
+	int w, h = 0;
+	glfwGetFramebufferSize(window, &w, &h);
+	glViewport(0, 0, w, h);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), viewportWidth * 1.0f / viewportHeight, 0.1f, 100.0f);
@@ -246,4 +248,5 @@ void ShadowMapping::renderCube() {
 
 void ShadowMapping::onDestroy() {
 	// 偷懒
+	glDeleteVertexArrays(1, &VAO);
 }
