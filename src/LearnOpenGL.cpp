@@ -74,6 +74,9 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	// 只使用核心集
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	#endif
 	GLFWwindow *window = glfwCreateWindow(800, 600, "test", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 	// glad 用于初始化opengl函数指针

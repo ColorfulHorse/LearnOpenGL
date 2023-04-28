@@ -1,7 +1,7 @@
 ﻿cmake_minimum_required(VERSION 3.8)
 
 project("LearnOpenGL")
-set(CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 file(GLOB_RECURSE SRC_LIST "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.c")
 file(GLOB_RECURSE INCLUDE_LIST "${PROJECT_SOURCE_DIR}/include/*.h" "${PROJECT_SOURCE_DIR}/include/*.hpp")
@@ -22,7 +22,7 @@ link_directories(${LIBS_DIR})
 
 add_executable(LearnOpenGL  ${INCLUDE_LIST} ${SRC_LIST})
 
-file(GLOB_RECURSE LIB_LIST ${LIBS_DIR}/*.dll)
+file(GLOB_RECURSE LIB_LIST ${LIBS_DIR}/*.*)
 
 # 链接前拷贝资源文件
 add_custom_command(TARGET LearnOpenGL PRE_LINK
@@ -30,9 +30,28 @@ add_custom_command(TARGET LearnOpenGL PRE_LINK
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different 
 	${LIB_LIST} ${OUTPUT_DIR})
 
+
 target_link_libraries(
 	LearnOpenGL
 	assimp
 	glfw3
-	opengl32
 )
+
+if (APPLE)
+	target_link_libraries(
+		LearnOpenGL
+		"-framework OpenGL"
+		"-framework CoreFoundation"
+		"-framework Appkit"
+		"-framework IOKit"
+		"-framework CoreGraphics"
+		draco
+		kubazip
+		minizip
+		poly2tri
+		pugixml
+		z
+	)
+else()
+	target_link_libraries(LearnOpenGL opengl32)
+endif()
